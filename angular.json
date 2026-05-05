@@ -70,7 +70,8 @@
               "buildTarget": "booka-frontend:build:production"
             },
             "development": {
-              "buildTarget": "booka-frontend:build:development"
+              "buildTarget": "booka-frontend:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"

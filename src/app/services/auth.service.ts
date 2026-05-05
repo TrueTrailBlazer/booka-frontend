@@ -15,12 +15,27 @@ export class AuthService {
       .pipe(
         tap(response => {
           if (response.token) {
-            localStorage.setItem('token', response.token);
-            const role = response.usuario?.role || 'CLIENTE';
-            localStorage.setItem('role', role);
+            this.handleAuthResponse(response);
           }
         })
       );
+  }
+
+  loginWithGoogle(credential: string) {
+    return this.http.post<{ token: string, usuario?: any }>(`${this.apiUrl}/auth/google`, { credential })
+      .pipe(
+        tap(response => {
+          if (response.token) {
+            this.handleAuthResponse(response);
+          }
+        })
+      );
+  }
+
+  private handleAuthResponse(response: { token: string, usuario?: any }) {
+    localStorage.setItem('token', response.token);
+    const role = response.usuario?.role || 'CLIENTE';
+    localStorage.setItem('role', role);
   }
 
   loginTeste(tipo: 'CLIENTE' | 'PROFISSIONAL') {
