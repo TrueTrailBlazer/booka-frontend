@@ -18,31 +18,29 @@
           <p class="text-slate-500 mt-1">Gerencie sua base de clientes e histórico de agendamentos.</p>
         </div>
         <button (click)="abrirModal()"
-          class="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-2.5 rounded-xl font-bold flex items-center gap-2 transition-all shadow-sm">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-          </svg>
+                class="btn btn-primary text-white font-bold rounded-xl gap-2 shadow-sm">
+          <span class="material-symbols-outlined text-[20px] font-bold">add</span>
           Novo Cliente
         </button>
       </div>
 
-      <section class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden w-full">
+      <section class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden w-full">
 
         <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse">
-            <thead>
-              <tr class="bg-slate-50/50 border-b border-slate-100">
-                <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Nome</th>
-                <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">WhatsApp</th>
-                <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Total de Agendamentos
-                </th>
-                <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Ações</th>
+          <table class="table table-zebra table-md w-full">
+            <thead class="bg-slate-50/50 text-slate-500 text-xs font-black uppercase tracking-widest border-b border-slate-100">
+              <tr>
+                <th>Nome</th>
+                <th>WhatsApp</th>
+                <th>Total de Agendamentos</th>
+                <th class="text-right">Ações</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-slate-100">              <!-- Loading State -->
+            <tbody class="text-sm font-medium">
+              <!-- Loading State -->
               @if (isLoading) {
               <tr>
-                <td colspan="4" class="px-6 py-8 text-center text-slate-500 font-medium">
+                <td colspan="4" class="py-8 text-center text-slate-500 font-bold">
                   Carregando clientes...
                 </td>
               </tr>
@@ -51,7 +49,7 @@
               <!-- Empty State -->
               @if (!isLoading && clientes.length === 0) {
               <tr>
-                <td colspan="4" class="px-6 py-8 text-center text-slate-500 font-medium">
+                <td colspan="4" class="py-8 text-center text-slate-500 font-bold">
                   Nenhum cliente cadastrado.
                 </td>
               </tr>
@@ -59,28 +57,23 @@
 
               <!-- Data State -->
               @for (cliente of clientes; track cliente.id) {
-              <tr class="hover:bg-slate-50/50 transition-colors group">
-                <td class="px-6 py-5">
+              <tr class="hover group">
+                <td>
                   <div class="flex items-center gap-3">
                     <div
-                      class="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 font-medium">
+                      class="w-9 h-9 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 font-bold shadow-inner">
                       {{ cliente.nome.substring(0, 2).toUpperCase() }}</div>
-                    <span class="font-semibold text-slate-900">{{ cliente.nome }}</span>
+                    <span class="font-bold text-slate-900">{{ cliente.nome }}</span>
                   </div>
                 </td>
-                <td class="px-6 py-5 text-slate-600">{{ cliente.telefone || '-' }}</td>
-                <td class="px-6 py-5">
-                  <span class="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full text-sm font-bold">0
-                    agendamentos</span>
+                <td class="text-slate-600">{{ cliente.telefone || '-' }}</td>
+                <td>
+                  <span class="badge badge-primary badge-outline font-bold">0 agendamentos</span>
                 </td>
-                <td class="px-6 py-5 text-right">
+                <td class="text-right">
                   <button
-                    class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-bold inline-flex items-center gap-2 transition-colors">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                      <path
-                        d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.539 2.016 2.041-.54c.731.387 1.996.805 3.247.805 3.18 0 5.766-2.586 5.767-5.767 0-3.18-2.586-5.767-5.767-5.767zm3.39 8.243c-.147.414-.731.762-1.012.809-.271.048-.598.077-1.21-.164-.265-.104-.613-.234-1.121-.453-1.638-.707-2.695-2.382-2.775-2.492-.08-.11-.645-.858-.645-1.638 0-.78.406-1.163.551-1.314.144-.151.314-.188.421-.188.106 0 .213.001.304.006.101.006.237-.038.371.285.138.334.472 1.15.513 1.231.04.081.066.175.012.285-.054.11-.081.19-.161.284-.081.094-.17.21-.243.282-.081.08-.166.168-.071.332.095.163.421.696.903 1.127.621.554 1.143.726 1.307.808.163.081.259.068.354-.043.095-.11.408-.475.517-.638.11-.163.22-.136.371-.081.151.054.957.452 1.122.534.165.081.275.122.316.191.041.07.041.406-.106.82z">
-                      </path>
-                    </svg>
+                    class="btn btn-sm btn-outline text-slate-500 hover:bg-slate-100 hover:text-slate-700 font-bold border-slate-200 rounded-xl transition-colors">
+                    <span class="material-symbols-outlined text-[18px]">chat</span>
                     Mensagem
                   </button>
                 </td>
@@ -112,44 +105,48 @@
         </div>
       </section>
 
-      <!-- Modal Novo Cliente -->
-      @if (showModal) {
-      <div class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm">
-        <div class="bg-white rounded-2xl p-8 w-full max-w-md shadow-xl">
-          <h2 class="text-2xl font-bold text-slate-800 mb-6">Novo Cliente</h2>
-          
-          <div class="space-y-4">
-            <div>
-              <label class="block text-sm font-medium text-slate-700 mb-1">Nome Completo</label>
-              <input type="text" [(ngModel)]="novoCliente.nome" class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Ex: João da Silva" />
-            </div>
-            
-            <div>
-              <label class="block text-sm font-medium text-slate-700 mb-1">E-mail</label>
-              <input type="email" [(ngModel)]="novoCliente.email" class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Ex: joao@email.com" />
-            </div>
-            
-            <div>
-              <label class="block text-sm font-medium text-slate-700 mb-1">WhatsApp</label>
-              <input type="text" [(ngModel)]="novoCliente.telefone" class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Ex: (11) 99999-9999" />
-            </div>
-          </div>
-          
-          <div class="mt-8 flex gap-3 justify-end">
-            <button (click)="fecharModal()" [disabled]="isSaving" class="px-5 py-2 text-slate-600 font-medium hover:bg-slate-100 rounded-lg transition-colors">Cancelar</button>
-            <button (click)="salvarCliente()" [disabled]="isSaving" class="px-5 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-lg transition-colors disabled:opacity-75 flex items-center gap-2">
-              @if (isSaving) {
-                <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                Salvando...
-              } @else {
-                Salvar Cliente
-              }
-            </button>
-          </div>
-        </div>
-      </div>
-      }on>
-
     </main>
   </div>
 </div>
+
+<!-- Modal Novo Cliente -->
+@if (showModal) {
+<div class="modal modal-open">
+  <div class="modal-box bg-white overflow-hidden">
+    <form method="dialog">
+      <button (click)="fecharModal()" class="btn btn-sm btn-circle btn-ghost absolute right-4 top-4 text-slate-400">✕</button>
+    </form>
+    <h3 class="font-bold text-2xl text-slate-800 mb-6">Novo Cliente</h3>
+    
+    <div class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">Nome Completo</label>
+        <input type="text" [(ngModel)]="novoCliente.nome" class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white text-slate-800" placeholder="Ex: João da Silva" />
+      </div>
+      
+      <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">E-mail</label>
+        <input type="email" [(ngModel)]="novoCliente.email" class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white text-slate-800" placeholder="Ex: joao@email.com" />
+      </div>
+      
+      <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">WhatsApp</label>
+        <input type="text" [(ngModel)]="novoCliente.telefone" class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white text-slate-800" placeholder="Ex: (11) 99999-9999" />
+      </div>
+    </div>
+    
+    <div class="modal-action mt-8">
+      <button (click)="fecharModal()" [disabled]="isSaving" class="btn btn-ghost text-slate-500 font-bold hover:bg-slate-100 rounded-xl">Cancelar</button>
+      <button (click)="salvarCliente()" [disabled]="isSaving" class="btn bg-emerald-500 hover:bg-emerald-600 border-none text-white font-bold rounded-xl flex items-center gap-2">
+        @if (isSaving) {
+          <span class="loading loading-spinner loading-sm text-white"></span>
+          Salvando...
+        } @else {
+          Salvar Cliente
+        }
+      </button>
+    </div>
+  </div>
+  <div class="modal-backdrop" (click)="fecharModal()"></div>
+</div>
+}

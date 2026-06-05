@@ -1,10 +1,9 @@
 export interface Cliente {
-  id?: number | string;
+  id: string;
   nome: string;
-  email?: string;
-  telefone?: string;
-  lojaId?: number | string;
-  anotacoes?: string;
-  criadoEm?: Date | string;
-  atualizadoEm?: Date | string;
+  email?: string | null;
+  telefone: string;
+  anotacoes?: string | null;
+  createdAt: string;
+  updatedAt: string;
 }

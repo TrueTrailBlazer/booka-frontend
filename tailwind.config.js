@@ -18,10 +18,31 @@ module.exports = {
         error: '#ba1a1a',
       },
       fontFamily: {
+        sans: ['Inter', 'sans-serif'],
         body: ['Inter', 'sans-serif'],
         headline: ['Inter', 'sans-serif'],
       }
     },
   },
-  plugins: [],
+  plugins: [
+    require('daisyui'),
+  ],
+  daisyui: {
+    themes: [
+      {
+        light: {
+          "primary": "#004ac6",
+          "secondary": "#2563eb",
+          "accent": "#006242",
+          "neutral": "#191c1e",
+          "base-100": "#ffffff",
+          "info": "#3abff8",
+          "success": "#36d399",
+          "warning": "#fbbd23",
+          "error": "#ba1a1a",
+        },
+      },
+    ],
+    darkTheme: "light",
+  },
 }

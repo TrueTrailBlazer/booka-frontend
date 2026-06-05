@@ -1,10 +1,10 @@
 export interface Servico {
-  id?: number | string;
+  id: string;
   nome: string;
-  descricao?: string;
+  descricao?: string | null;
+  duracaoMinutos: number;
   preco: number;
-  duracaoMinutos?: number;
-  lojaId?: number | string;
-  criadoEm?: Date | string;
-  atualizadoEm?: Date | string;
+  ativo: boolean;
+  createdAt: string;
+  updatedAt: string;
 }

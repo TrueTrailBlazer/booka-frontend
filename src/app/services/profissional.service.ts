@@ -1,35 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { Observable, catchError } from 'rxjs';
-import { throwError } from 'rxjs';
-
-export interface Profissional {
-  id: string;
-  nomeExibicao: string;
-  profissao: string;
-  bio?: string;
-  imagemUrl?: string;
-  categoriaPrincipal: string;
-  modalidadePrincipal: 'ONLINE' | 'PRESENCIAL' | 'HIBRIDO';
-  cidade?: string;
-  publicado: boolean;
-  rating: number;
-  avaliacoesCount: number;
-}
-
-export interface ProfissionalDetalhe extends Profissional {
-  loja?: {
-    id: string;
-    nome: string;
-    slug: string;
-    email?: string;
-    telefone?: string;
-    endereco?: string;
-    descricao?: string;
-  };
-  servicos?: any[];
-}
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { Profissional, ProfissionalDetalhe } from '../models';
 
 @Injectable({
   providedIn: 'root'
@@ -38,16 +12,18 @@ export class ProfissionalService {
   private http = inject(HttpClient);
   private apiUrl = `${environment.apiUrl}/profissionais`;
 
-  // Listing público com paginação
-  listar(params?: { page?: number; limit?: number; categoria?: string; cidade?: string }): Observable<{ data: Profissional[] }> {
+  // Listagem pública de profissionais
+  listar(params?: { q?: string; cidade?: string; categoria?: string; modalidade?: string; precoMax?: number; avaliacaoMinima?: number }): Observable<Profissional[]> {
     let httpParams = new HttpParams();
     if (params) {
-      if (params.page) httpParams = httpParams.set('page', params.page);
-      if (params.limit) httpParams = httpParams.set('limit', params.limit);
-      if (params.categoria) httpParams = httpParams.set('categoria', params.categoria);
+      if (params.q) httpParams = httpParams.set('q', params.q);
       if (params.cidade) httpParams = httpParams.set('cidade', params.cidade);
+      if (params.categoria) httpParams = httpParams.set('categoria', params.categoria);
+      if (params.modalidade) httpParams = httpParams.set('modalidade', params.modalidade);
+      if (params.precoMax !== undefined) httpParams = httpParams.set('precoMax', params.precoMax);
+      if (params.avaliacaoMinima !== undefined) httpParams = httpParams.set('avaliacaoMinima', params.avaliacaoMinima);
     }
-    return this.http.get<{ data: Profissional[] }>(this.apiUrl, { params: httpParams })
+    return this.http.get<Profissional[]>(this.apiUrl, { params: httpParams })
       .pipe(
         catchError(err => {
           console.error('Erro ao listar profissionais:', err);
@@ -56,9 +32,9 @@ export class ProfissionalService {
       );
   }
 
-  // Detalhe público por slug
-  obterPorSlug(slug: string): Observable<ProfissionalDetalhe> {
-    return this.http.get<ProfissionalDetalhe>(`${this.apiUrl}/${slug}`)
+  // Detalhe público por ID da loja
+  obterPorId(id: string): Observable<ProfissionalDetalhe> {
+    return this.http.get<ProfissionalDetalhe>(`${this.apiUrl}/${id}`)
       .pipe(
         catchError(err => {
           console.error('Erro ao obter profissional:', err);
@@ -67,10 +43,11 @@ export class ProfissionalService {
       );
   }
 
-  // Disponibilidade por data
-  obterDisponibilidade(slug: string, data: string): Observable<{ slots: any[] }> {
+  // Disponibilidade por data, opcionalmente filtrada pela duração do serviço
+  obterDisponibilidade(id: string, data: string, servicoId?: string): Observable<{ slots: string[] }> {
     let httpParams = new HttpParams().set('data', data);
-    return this.http.get<{ slots: any[] }>(`${this.apiUrl}/${slug}/disponibilidade`, { params: httpParams })
+    if (servicoId) httpParams = httpParams.set('servicoId', servicoId);
+    return this.http.get<{ slots: string[] }>(`${this.apiUrl}/${id}/disponibilidade`, { params: httpParams })
       .pipe(
         catchError(err => {
           console.error('Erro ao obter disponibilidade:', err);

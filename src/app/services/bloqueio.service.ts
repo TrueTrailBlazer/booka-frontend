@@ -1,23 +1,22 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 export interface BloqueioAgenda {
   id: string;
-  dataInicio: string;
-  dataFim: string;
-  motivo?: string;
-  lojaId: string;
+  inicio: string;
+  fim: string;
+  motivo?: string | null;
   createdAt: string;
   updatedAt: string;
 }
 
 export interface CreateBloqueioRequest {
-  dataInicio: string;
-  dataFim: string;
-  motivo?: string;
+  inicio: string;
+  fim: string;
+  motivo?: string | null;
 }
 
 @Injectable({
@@ -28,13 +27,8 @@ export class BloqueioService {
   private apiUrl = `${environment.apiUrl}/bloqueios`;
 
   // Listar bloqueios da loja do profissional logado
-  listar(params?: { page?: number; limit?: number }): Observable<{ data: BloqueioAgenda[] }> {
-    let httpParams = new HttpParams();
-    if (params) {
-      if (params.page) httpParams = httpParams.set('page', params.page);
-      if (params.limit) httpParams = httpParams.set('limit', params.limit);
-    }
-    return this.http.get<{ data: BloqueioAgenda[] }>(this.apiUrl, { params: httpParams })
+  listar(): Observable<BloqueioAgenda[]> {
+    return this.http.get<BloqueioAgenda[]>(this.apiUrl)
       .pipe(
         catchError(err => {
           console.error('Erro ao listar bloqueios:', err);
@@ -43,12 +37,44 @@ export class BloqueioService {
       );
   }
 
+  // Obter um bloqueio por id
+  obter(id: string): Observable<BloqueioAgenda> {
+    return this.http.get<BloqueioAgenda>(`${this.apiUrl}/${id}`)
+      .pipe(
+        catchError(err => {
+          console.error('Erro ao obter bloqueio:', err);
+          return throwError(() => err);
+        })
+      );
+  }
+
   // Criar novo bloqueio
-  criar(dados: CreateBloqueioRequest): Observable<{ bloqueio: BloqueioAgenda }> {
-    return this.http.post<{ bloqueio: BloqueioAgenda }>(this.apiUrl, dados)
+  criar(dados: CreateBloqueioRequest): Observable<BloqueioAgenda> {
+    return this.http.post<BloqueioAgenda>(this.apiUrl, dados)
       .pipe(
         catchError(err => {
           console.error('Erro ao criar bloqueio:', err);
+          return throwError(() => err);
+        })
+      );
+  }
+
+  criarLote(bloqueios: CreateBloqueioRequest[]): Observable<BloqueioAgenda[]> {
+    return this.http.post<BloqueioAgenda[]>(`${this.apiUrl}/lote`, { bloqueios })
+      .pipe(
+        catchError(err => {
+          console.error('Erro ao criar bloqueios em lote:', err);
+          return throwError(() => err);
+        })
+      );
+  }
+
+  // Atualizar bloqueio
+  atualizar(id: string, dados: Partial<CreateBloqueioRequest>): Observable<BloqueioAgenda> {
+    return this.http.put<BloqueioAgenda>(`${this.apiUrl}/${id}`, dados)
+      .pipe(
+        catchError(err => {
+          console.error('Erro ao atualizar bloqueio:', err);
           return throwError(() => err);
         })
       );

@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { AgendamentoService } from '../../services/agendamento.service';
 import { AuthService } from '../../services/auth.service';
-import { Agendamento } from '../../models/Agendamento';
+import { ModalService } from '../../services/modal.service';
+import { Agendamento } from '../../models';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 
 @Component({
@@ -15,12 +16,13 @@ import { NavbarComponent } from '../../components/navbar/navbar.component';
 export class MeusAgendamentosComponent implements OnInit {
     private agendamentoService = inject(AgendamentoService);
     private authService = inject(AuthService);
+    private modalService = inject(ModalService);
     private router = inject(Router);
 
     agendamentos: Agendamento[] = [];
     loading = true;
     error = false;
-    cancelandoId: string | number | null = null;
+    cancelandoId: string | null = null;
 
 
 
@@ -47,28 +49,32 @@ export class MeusAgendamentosComponent implements OnInit {
     isFuturo(data: string | Date): boolean {
         const dataAgendamento = new Date(data);
         const agora = new Date();
-        // Zera as horas para comparar apenas os dias se necessário, 
-        // ou mantém para precisão de minuto. Aqui manteremos precisão.
         return dataAgendamento > agora;
     }
 
-    cancelar(id: string | number | undefined) {
+    cancelar(id: string | undefined) {
         if (!id) return;
 
-        if (confirm('Deseja realmente cancelar este agendamento?')) {
-            this.cancelandoId = id;
-            this.agendamentoService.cancelar(id).subscribe({
-                next: () => {
-                    const item = this.agendamentos.find(a => a.id === id);
-                    if (item) item.status = 'CANCELADO';
-                    this.cancelandoId = null;
-                },
-                error: (err) => {
-                    console.error('Erro ao cancelar:', err);
-                    alert('Não foi possível cancelar o agendamento no momento.');
-                    this.cancelandoId = null;
-                }
-            });
-        }
+        this.modalService.confirm(
+            'Cancelar Agendamento',
+            'Deseja realmente cancelar este agendamento?',
+            () => {
+                this.cancelandoId = id;
+                this.agendamentoService.cancelar(id).subscribe({
+                    next: () => {
+                        const item = this.agendamentos.find(a => a.id === id);
+                        if (item) item.status = 'CANCELADO';
+                        this.cancelandoId = null;
+                    },
+                    error: (err) => {
+                        console.error('Erro ao cancelar:', err);
+                        alert('Não foi possível cancelar o agendamento no momento.');
+                        this.cancelandoId = null;
+                    }
+                });
+            },
+            'Sim, Cancelar',
+            'Voltar'
+        );
     }
 }

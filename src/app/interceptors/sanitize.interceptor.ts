@@ -1,8 +1,8 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 
 export const sanitizeInterceptor: HttpInterceptorFn = (req, next) => {
-  // Para POST/PUT, validar e sanitizar body básico
-  if ((req.method === 'POST' || req.method === 'PUT') && req.body) {
+  // Para POST/PUT, sanitizar body básico — mas nunca tocar em FormData (upload de arquivos)
+  if ((req.method === 'POST' || req.method === 'PUT') && req.body && !(req.body instanceof FormData)) {
     try {
       const sanitizedBody = sanitizeRequestBody(req.body);
       req = req.clone({ body: sanitizedBody });

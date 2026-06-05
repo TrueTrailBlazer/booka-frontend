@@ -1,246 +1,205 @@
 <div class="bg-[#f8fafc] text-slate-800 antialiased min-h-screen flex flex-col font-['Inter']">
-    <!-- Navbar -->
-    <app-navbar class="fixed top-0 w-full z-50"></app-navbar>
+  <app-navbar class="fixed top-0 w-full z-50"></app-navbar>
 
-    <main class="pt-24 flex-grow">
-        <!-- Search Bar (Rola com a página agora) -->
-        <div class="max-w-7xl mx-auto px-6 mb-10">
-            <div class="flex items-center bg-white border border-slate-200 rounded-2xl px-4 py-3 shadow-sm focus-within:border-[#004ac6] focus-within:ring-2 focus-within:ring-blue-50 transition-all w-full max-w-4xl mx-auto md:mx-0">
-                <div class="flex items-center gap-3 border-r border-slate-100 pr-4 grow">
-                    <span class="material-symbols-outlined text-slate-400 text-xl">search</span>
-                    <input class="bg-transparent border-none focus:ring-0 text-sm font-bold w-full placeholder:text-slate-400 outline-none" placeholder="O que busca?" type="text" [(ngModel)]="termoBusca" />
-                </div>
-                <div class="flex items-center gap-3 pl-4 grow">
-                    <span class="material-symbols-outlined text-slate-400 text-xl">location_on</span>
-                    <input class="bg-transparent border-none focus:ring-0 text-sm font-bold w-full placeholder:text-slate-400 outline-none" placeholder="Onde?" type="text" [(ngModel)]="cidadeBusca" />
-                </div>
+  <main class="pt-24 flex-grow">
+    <div class="max-w-7xl mx-auto px-6 mb-10">
+      <div class="flex flex-col md:flex-row md:items-center bg-white border border-slate-200 rounded-2xl px-4 py-3 shadow-sm focus-within:border-[#004ac6] focus-within:ring-2 focus-within:ring-blue-50 transition-all w-full max-w-4xl mx-auto md:mx-0">
+        <div class="flex items-center gap-3 md:border-r md:border-slate-100 md:pr-4 grow">
+          <span class="material-symbols-outlined text-slate-400 text-xl">search</span>
+          <input class="bg-transparent border-none focus:ring-0 text-sm font-bold w-full placeholder:text-slate-400 outline-none" placeholder="O que busca?" type="text" [(ngModel)]="termoBusca" />
+        </div>
+        <div class="flex items-center gap-3 md:pl-4 grow mt-3 md:mt-0">
+          <span class="material-symbols-outlined text-slate-400 text-xl">location_on</span>
+          <input class="bg-transparent border-none focus:ring-0 text-sm font-bold w-full placeholder:text-slate-400 outline-none" placeholder="Onde?" type="text" [(ngModel)]="cidadeBusca" />
+        </div>
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 pb-20 grid lg:grid-cols-[280px_1fr] gap-10">
+      <aside class="hidden lg:block sticky top-24 h-[calc(100vh-120px)] overflow-y-auto overscroll-contain hide-scrollbar self-start bg-white p-6 rounded-2xl shadow-sm border border-slate-200/60">
+        <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
+          <h2 class="text-base font-black text-slate-900">Filtros</h2>
+          <button (click)="limparFiltros()" class="text-xs font-bold text-[#004ac6] hover:underline">Limpar</button>
+        </div>
+
+        <div class="space-y-6">
+          <div>
+            <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3">Categorias</h3>
+            <div class="grid grid-cols-1 gap-2">
+              <label class="relative flex cursor-pointer rounded-xl border p-3 shadow-sm hover:bg-slate-50 transition-all"
+                [ngClass]="categorias['Consultoria'] ? 'border-[#004ac6] ring-1 ring-[#004ac6] bg-blue-50/20' : 'border-slate-200'">
+                <input type="checkbox" [(ngModel)]="categorias['Consultoria']" (change)="onFilterChange()" class="sr-only" />
+                <span class="text-sm font-bold text-slate-900">Consultoria</span>
+              </label>
+
+              <label class="relative flex cursor-pointer rounded-xl border p-3 shadow-sm hover:bg-slate-50 transition-all"
+                [ngClass]="categorias['Educação'] ? 'border-[#004ac6] ring-1 ring-[#004ac6] bg-blue-50/20' : 'border-slate-200'">
+                <input type="checkbox" [(ngModel)]="categorias['Educação']" (change)="onFilterChange()" class="sr-only" />
+                <span class="text-sm font-bold text-slate-900">Educação e Aulas</span>
+              </label>
+
+              <label class="relative flex cursor-pointer rounded-xl border p-3 shadow-sm hover:bg-slate-50 transition-all"
+                [ngClass]="categorias['Beleza'] ? 'border-[#004ac6] ring-1 ring-[#004ac6] bg-blue-50/20' : 'border-slate-200'">
+                <input type="checkbox" [(ngModel)]="categorias['Beleza']" (change)="onFilterChange()" class="sr-only" />
+                <span class="text-sm font-bold text-slate-900">Beleza</span>
+              </label>
+
+              <label class="relative flex cursor-pointer rounded-xl border p-3 shadow-sm hover:bg-slate-50 transition-all"
+                [ngClass]="categorias['Bem-Estar e Saúde'] ? 'border-[#004ac6] ring-1 ring-[#004ac6] bg-blue-50/20' : 'border-slate-200'">
+                <input type="checkbox" [(ngModel)]="categorias['Bem-Estar e Saúde']" (change)="onFilterChange()" class="sr-only" />
+                <span class="text-sm font-bold text-slate-900">Bem-Estar e Saúde</span>
+              </label>
+
+              <label class="relative flex cursor-pointer rounded-xl border p-3 shadow-sm hover:bg-slate-50 transition-all"
+                [ngClass]="categorias['Casa'] ? 'border-[#004ac6] ring-1 ring-[#004ac6] bg-blue-50/20' : 'border-slate-200'">
+                <input type="checkbox" [(ngModel)]="categorias['Casa']" (change)="onFilterChange()" class="sr-only" />
+                <span class="text-sm font-bold text-slate-900">Casa e Reparos</span>
+              </label>
             </div>
+          </div>
+
+          <div>
+            <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3">Preço Máximo</h3>
+            <input [(ngModel)]="precomax" (change)="onFilterChange()" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#004ac6]" max="500" min="0" type="range" />
+            <div class="flex justify-between mt-2">
+              <span class="text-xs font-bold text-slate-400">R$ 0</span>
+              <span class="text-xs font-black text-[#004ac6]">R$ {{ precomax }}{{ precomax >= 500 ? '+' : '' }}</span>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3">Avaliação Mínima</h3>
+            <div class="space-y-1.5">
+              <button (click)="setAvaliacao(4.5)" [ngClass]="avaliacaoMinima === 4.5 ? 'bg-blue-50 border-blue-200' : 'bg-white border-slate-200 hover:bg-slate-50'" class="flex items-center justify-between w-full p-2.5 rounded-xl border transition-colors">
+                <div class="flex items-center gap-1.5" [ngClass]="avaliacaoMinima === 4.5 ? 'text-[#004ac6]' : 'text-slate-600'">
+                  <span class="material-symbols-outlined text-[16px]" [ngStyle]="{'font-variation-settings': avaliacaoMinima === 4.5 ? '\'FILL\' 1' : '\'FILL\' 0'}">star</span>
+                  <span class="text-sm font-bold">4.5+ Estrelas</span>
+                </div>
+              </button>
+              <button (click)="setAvaliacao(4.0)" [ngClass]="avaliacaoMinima === 4.0 ? 'bg-blue-50 border-blue-200' : 'bg-white border-slate-200 hover:bg-slate-50'" class="flex items-center justify-between w-full p-2.5 rounded-xl border transition-colors">
+                <div class="flex items-center gap-1.5" [ngClass]="avaliacaoMinima === 4.0 ? 'text-[#004ac6]' : 'text-slate-600'">
+                  <span class="material-symbols-outlined text-[16px]" [ngStyle]="{'font-variation-settings': avaliacaoMinima === 4.0 ? '\'FILL\' 1' : '\'FILL\' 0'}">star</span>
+                  <span class="text-sm font-bold">4.0+ Estrelas</span>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3">Modalidade</h3>
+            <div class="grid grid-cols-2 gap-2">
+              <button (click)="setModalidade('Online')" [ngClass]="modalidade === 'Online' ? 'bg-[#004ac6] text-white border-transparent shadow-[0_4px_12px_rgba(0,74,198,0.2)]' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'" class="flex flex-col items-center justify-center py-3 rounded-xl border font-bold gap-1 transition-all">
+                <span class="material-symbols-outlined text-[20px]">wifi</span>
+                <span class="text-xs uppercase tracking-tight">Online</span>
+              </button>
+              <button (click)="setModalidade('Presencial')" [ngClass]="modalidade === 'Presencial' ? 'bg-[#004ac6] text-white border-transparent shadow-[0_4px_12px_rgba(0,74,198,0.2)]' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'" class="flex flex-col items-center justify-center py-3 rounded-xl border font-bold gap-1 transition-all">
+                <span class="material-symbols-outlined text-[20px]">directions_walk</span>
+                <span class="text-xs uppercase tracking-tight">Presencial</span>
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3">Vendedor</h3>
+            <div class="grid grid-cols-1 gap-2">
+              <label class="relative flex cursor-pointer rounded-xl border p-3 shadow-sm hover:bg-slate-50 transition-all"
+                [ngClass]="tiposVendedor['Autônomo'] ? 'border-[#004ac6] ring-1 ring-[#004ac6] bg-blue-50/20' : 'border-slate-200'">
+                <input type="checkbox" [(ngModel)]="tiposVendedor['Autônomo']" (change)="onFilterChange()" class="sr-only" />
+                <span class="text-sm font-bold text-slate-900">Freelancers (Autônomos)</span>
+              </label>
+              <label class="relative flex cursor-pointer rounded-xl border p-3 shadow-sm hover:bg-slate-50 transition-all"
+                [ngClass]="tiposVendedor['Empresa'] ? 'border-[#004ac6] ring-1 ring-[#004ac6] bg-blue-50/20' : 'border-slate-200'">
+                <input type="checkbox" [(ngModel)]="tiposVendedor['Empresa']" (change)="onFilterChange()" class="sr-only" />
+                <span class="text-sm font-bold text-slate-900">Agências (Empresas)</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <section class="flex-1">
+        <div class="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div>
+            <h1 class="text-2xl font-black tracking-tight text-slate-900 mb-1">
+              Resultados para <span class="text-[#004ac6]">"{{ termoBusca || 'Todos os Serviços' }}"</span>
+            </h1>
+            <p class="text-slate-500 font-medium text-sm">Listando os melhores profissionais baseados no seu filtro</p>
+          </div>
+
+          <button (click)="limparFiltros()" class="lg:hidden flex items-center gap-2 bg-white px-3 py-2 border border-slate-200 rounded-lg text-sm font-bold shadow-sm">
+            <span class="material-symbols-outlined text-[16px]">restart_alt</span> Limpar
+          </button>
         </div>
 
-        <div class="max-w-7xl mx-auto px-6 pb-20 grid lg:grid-cols-[280px_1fr] gap-10">
-            <!-- Sidebar (Esquerda) - Fixa com rolagem interna -->
-            <aside class="hidden lg:block sticky top-24 h-[calc(100vh-120px)] overflow-y-auto overscroll-contain hide-scrollbar self-start bg-white p-6 rounded-2xl shadow-sm border border-slate-200/60">
-                <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
-                    <h2 class="text-base font-black text-slate-900">Filtros</h2>
-                    <button class="text-xs font-bold text-[#004ac6] hover:underline">Limpar</button>
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+          @if (profissionaisFiltrados.length === 0) {
+            <div class="col-span-1 md:col-span-2 xl:col-span-3 text-center py-20 border-2 border-dashed border-slate-200 rounded-3xl">
+              <span class="material-symbols-outlined text-4xl text-slate-300 mb-2">search_off</span>
+              <h3 class="text-lg font-bold text-slate-700">Nenhum profissional encontrado</h3>
+              <p class="text-sm text-slate-500">Tente ajustar seus filtros para ver mais resultados.</p>
+            </div>
+          }
+
+          @for (prof of profissionaisFiltrados; track prof.id) {
+            <div class="group bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col cursor-pointer"
+              [routerLink]="['/agendar', prof.id]">
+              <div class="relative h-40 overflow-hidden bg-slate-100">
+                @if (getImageUrl(prof.capaUrl || prof.img); as capaSrc) {
+                  <img [alt]="prof.nome" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" [src]="capaSrc" />
+                } @else {
+                  <div class="w-full h-full bg-gradient-to-br from-slate-100 to-blue-50 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-5xl text-slate-300">storefront</span>
+                  </div>
+                }
+
+                <div class="absolute top-3 left-3">
+                  <span *ngIf="prof.rating >= 4.8" class="bg-slate-900/80 backdrop-blur text-white text-[10px] font-bold px-2.5 py-1 rounded-md flex items-center gap-1 shadow">
+                    <span class="material-symbols-outlined text-[12px]" style="font-variation-settings: 'FILL' 1;">verified</span> Em Alta
+                  </span>
+                  <span *ngIf="prof.rating < 4.8" class="bg-emerald-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-md shadow flex items-center gap-1">NOVATO</span>
                 </div>
 
-                <div class="space-y-6">
-                    <!-- Categorias -->
-                    <div>
-                        <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3">Categorias</h3>
-                        <div class="grid grid-cols-1 gap-2">
-                            <label
-                                class="relative flex cursor-pointer rounded-xl border p-3 shadow-sm hover:bg-slate-50 focus:outline-none transition-all"
-                                [ngClass]="categorias['Consultoria'] ? 'border-[#004ac6] ring-1 ring-[#004ac6] bg-blue-50/20' : 'border-slate-200'">
-                                <input type="checkbox" [(ngModel)]="categorias['Consultoria']" (change)="onFilterChange()" class="sr-only" />
-                                <span class="text-sm font-bold text-slate-900">Consultoria</span>
-                            </label>
-
-                            <label
-                                class="relative flex cursor-pointer rounded-xl border p-3 shadow-sm hover:bg-slate-50 focus:outline-none transition-all"
-                                [ngClass]="categorias['Educação'] ? 'border-[#004ac6] ring-1 ring-[#004ac6] bg-blue-50/20' : 'border-slate-200'">
-                                <input type="checkbox" [(ngModel)]="categorias['Educação']" (change)="onFilterChange()" class="sr-only" />
-                                <span class="text-sm font-bold text-slate-900">Educação e Aulas</span>
-                            </label>
-
-                            <label
-                                class="relative flex cursor-pointer rounded-xl border p-3 shadow-sm hover:bg-slate-50 focus:outline-none transition-all"
-                                [ngClass]="categorias['Bem-Estar e Saúde'] ? 'border-[#004ac6] ring-1 ring-[#004ac6] bg-blue-50/20' : 'border-slate-200'">
-                                <input type="checkbox" [(ngModel)]="categorias['Bem-Estar e Saúde']" (change)="onFilterChange()" class="sr-only" />
-                                <span class="text-sm font-bold text-slate-900">Bem-Estar e Saúde</span>
-                            </label>
-
-                            <label
-                                class="relative flex cursor-pointer rounded-xl border p-3 shadow-sm hover:bg-slate-50 focus:outline-none transition-all"
-                                [ngClass]="categorias['Casa'] ? 'border-[#004ac6] ring-1 ring-[#004ac6] bg-blue-50/20' : 'border-slate-200'">
-                                <input type="checkbox" [(ngModel)]="categorias['Casa']" (change)="onFilterChange()" class="sr-only" />
-                                <span class="text-sm font-bold text-slate-900">Casa e Reparos</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <!-- Preço Slider -->
-                    <div>
-                        <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3">Preço Máximo
-                        </h3>
-                        <div class="w-full">
-                            <input [(ngModel)]="precomax" (change)="onFilterChange()"
-                                class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#004ac6]"
-                                max="500" min="0" type="range" />
-                        </div>
-                        <div class="flex justify-between mt-2">
-                            <span class="text-xs font-bold text-slate-400">R$ 0</span>
-                            <span class="text-xs font-black text-[#004ac6]">R$ {{ precomax }}{{ precomax >= 500 ? '+' :
-                                '' }}</span>
-                        </div>
-                    </div>
-
-                    <!-- Avaliação -->
-                    <div>
-                        <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3">Avaliação
-                            Mínima</h3>
-                        <div class="space-y-1.5">
-                            <button (click)="setAvaliacao(4.5)"
-                                [ngClass]="avaliacaoMinima === 4.5 ? 'bg-blue-50 border-blue-200' : 'bg-white border-slate-200 hover:bg-slate-50'"
-                                class="flex items-center justify-between w-full p-2.5 rounded-xl border transition-colors">
-                                <div class="flex items-center gap-1.5"
-                                    [ngClass]="avaliacaoMinima === 4.5 ? 'text-[#004ac6]' : 'text-slate-600'">
-                                    <span class="material-symbols-outlined text-[16px]"
-                                        [ngStyle]="{'font-variation-settings': avaliacaoMinima === 4.5 ? '\'FILL\' 1' : '\'FILL\' 0'}">star</span>
-                                    <span class="text-sm font-bold">4.5+ Estrelas</span>
-                                </div>
-                            </button>
-                            <button (click)="setAvaliacao(4.0)"
-                                [ngClass]="avaliacaoMinima === 4.0 ? 'bg-blue-50 border-blue-200' : 'bg-white border-slate-200 hover:bg-slate-50'"
-                                class="flex items-center justify-between w-full p-2.5 rounded-xl border transition-colors">
-                                <div class="flex items-center gap-1.5"
-                                    [ngClass]="avaliacaoMinima === 4.0 ? 'text-[#004ac6]' : 'text-slate-600'">
-                                    <span class="material-symbols-outlined text-[16px]"
-                                        [ngStyle]="{'font-variation-settings': avaliacaoMinima === 4.0 ? '\'FILL\' 1' : '\'FILL\' 0'}">star</span>
-                                    <span class="text-sm font-bold">4.0+ Estrelas</span>
-                                </div>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Tipo de Serviço -->
-                    <div>
-                        <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3">Modalidade</h3>
-                        <div class="grid grid-cols-2 gap-2">
-                            <button (click)="setModalidade('Online')"
-                                [ngClass]="modalidade === 'Online' ? 'bg-[#004ac6] text-white border-transparent shadow-[0_4px_12px_rgba(0,74,198,0.2)]' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'"
-                                class="flex flex-col items-center justify-center py-3 rounded-xl border font-bold gap-1 transition-all">
-                                <span class="material-symbols-outlined text-[20px]">wifi</span>
-                                <span class="text-xs uppercase tracking-tight">Online</span>
-                            </button>
-                            <button (click)="setModalidade('Presencial')"
-                                [ngClass]="modalidade === 'Presencial' ? 'bg-[#004ac6] text-white border-transparent shadow-[0_4px_12px_rgba(0,74,198,0.2)]' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'"
-                                class="flex flex-col items-center justify-center py-3 rounded-xl border font-bold gap-1 transition-all">
-                                <span class="material-symbols-outlined text-[20px]">directions_walk</span>
-                                <span class="text-xs uppercase tracking-tight">Presencial</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Tipo de Vendedor -->
-                    <div>
-                        <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3">Vendedor</h3>
-                        <div class="grid grid-cols-1 gap-2">
-                            <label
-                                class="relative flex cursor-pointer rounded-xl border p-3 shadow-sm hover:bg-slate-50 focus:outline-none transition-all"
-                                [ngClass]="tiposVendedor['Autônomo'] ? 'border-[#004ac6] ring-1 ring-[#004ac6] bg-blue-50/20' : 'border-slate-200'">
-                                <input type="checkbox" [(ngModel)]="tiposVendedor['Autônomo']" (change)="onFilterChange()" class="sr-only" />
-                                <span class="text-sm font-bold text-slate-900">Freelancers (Autônomos)</span>
-                            </label>
-
-                            <label
-                                class="relative flex cursor-pointer rounded-xl border p-3 shadow-sm hover:bg-slate-50 focus:outline-none transition-all"
-                                [ngClass]="tiposVendedor['Empresa'] ? 'border-[#004ac6] ring-1 ring-[#004ac6] bg-blue-50/20' : 'border-slate-200'">
-                                <input type="checkbox" [(ngModel)]="tiposVendedor['Empresa']" (change)="onFilterChange()" class="sr-only" />
-                                <span class="text-sm font-bold text-slate-900">Agências (Empresas)</span>
-                            </label>
-                        </div>
-                    </div>
+                <div class="absolute -bottom-6 left-5 w-14 h-14 rounded-2xl border-4 border-white bg-white shadow-md overflow-hidden flex items-center justify-center">
+                  @if (getImageUrl(prof.avatarUrl); as avatarSrc) {
+                    <img [src]="avatarSrc" [alt]="prof.nome" class="w-full h-full object-cover" />
+                  } @else {
+                    <span class="material-symbols-outlined text-slate-400 text-3xl">person</span>
+                  }
                 </div>
-            </aside>
+              </div>
 
-            <!-- Área de Conteúdo (Direita) Compacta -->
-            <section class="flex-1">
-                <div class="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                    <div>
-                        <h1 class="text-2xl font-black tracking-tight text-slate-900 mb-1">
-                            Resultados para <span class="text-[#004ac6]">"{{ termoBusca || 'Todos os Serviços'
-                                }}"</span>
-                        </h1>
-                        <p class="text-slate-500 font-medium text-sm">Listando os melhores profissionais baseados no seu
-                            filtro</p>
-                    </div>
-
-                    <button
-                        class="lg:hidden flex items-center gap-2 bg-white px-3 py-2 border border-slate-200 rounded-lg text-sm font-bold shadow-sm">
-                        <span class="material-symbols-outlined text-[16px]">tune</span> Filtrar
-                    </button>
+              <div class="p-5 pt-9 flex flex-col grow">
+                <div class="flex items-start justify-between gap-3 mb-3">
+                  <div class="min-w-0">
+                    <h3 class="text-base font-black text-slate-900 line-clamp-1 group-hover:text-[#004ac6] transition-colors">{{ prof.nome }}</h3>
+                    <p class="text-xs font-bold text-[#004ac6] line-clamp-1 mt-1">{{ prof.profissao }}</p>
+                  </div>
+                  <div class="flex items-center gap-0.5 text-amber-500 shrink-0">
+                    <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                    <span class="text-xs font-bold text-slate-800">{{ prof.rating }}</span>
+                  </div>
                 </div>
 
-                <!-- Grid de Cards Dynamic Loop -->
-                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-
-                    @if (profissionaisFiltrados.length === 0) {
-                    <div
-                        class="col-span-1 md:col-span-2 xl:col-span-3 text-center py-20 border-2 border-dashed border-slate-200 rounded-3xl">
-                        <span class="material-symbols-outlined text-4xl text-slate-300 mb-2">search_off</span>
-                        <h3 class="text-lg font-bold text-slate-700">Nenhum profissional encontrado</h3>
-                        <p class="text-sm text-slate-500">Tente ajustar seus filtros na barra lateral para ver mais
-                            resultados.</p>
-                    </div>
-                    }
-
-                    @for (prof of profissionaisFiltrados; track prof.id) {
-                    <div class="group bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col cursor-pointer"
-                        [routerLink]="['/agendar', prof.id]">
-                        <div class="relative h-40 overflow-hidden">
-                            <img [alt]="prof.nome"
-                                class="w-full h-full object-cover transition-transform duration-700"
-                                [src]="prof.img" />
-                            <div class="absolute top-3 left-3">
-                                <span *ngIf="prof.id === 1"
-                                    class="bg-slate-900/80 backdrop-blur text-white text-[10px] font-bold px-2.5 py-1 rounded-md flex items-center gap-1 shadow">
-                                    <span class="material-symbols-outlined text-[12px]"
-                                        style="font-variation-settings: 'FILL' 1;">verified</span> Em Alta
-                                </span>
-                                <span *ngIf="prof.id > 1"
-                                    class="bg-emerald-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-md shadow flex items-center gap-1">NOVATO</span>
-                            </div>
-                        </div>
-                        <div class="p-5 flex flex-col grow">
-                            <h3
-                                class="text-base font-bold text-slate-900 mb-1 line-clamp-1 group-hover:text-[#004ac6] transition-colors">
-                                {{ prof.profissao }}</h3>
-                            <div class="flex items-center justify-between mb-4">
-                                <p class="text-xs font-medium text-slate-500">{{ prof.nome }}</p>
-                                <div class="flex items-center gap-0.5 text-amber-500">
-                                    <span class="material-symbols-outlined text-[14px]"
-                                        style="font-variation-settings: 'FILL' 1;">star</span>
-                                    <span class="text-xs font-bold text-slate-800">{{ prof.rating }}</span>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-2 text-slate-500 mb-4 text-xs font-bold">
-                                <div
-                                    class="bg-slate-50 px-2 py-1.5 rounded border border-slate-100 flex items-center gap-1">
-                                    <span class="material-symbols-outlined text-[14px]">schedule</span> 60 min
-                                </div>
-                            </div>
-                            <div class="mt-auto flex items-center justify-between">
-                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">A partir
-                                    de</span>
-                                <span class="text-lg font-black text-slate-900">{{ prof.preco | currency:'BRL' }}</span>
-                            </div>
-                        </div>
-                    </div>
-                    }
-
+                <div class="flex flex-wrap items-center gap-2 text-slate-500 mb-4 text-xs font-bold">
+                  <span class="bg-slate-50 px-2 py-1.5 rounded border border-slate-100 flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[14px]">category</span> {{ prof.categoria }}
+                  </span>
+                  <span class="bg-slate-50 px-2 py-1.5 rounded border border-slate-100 flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[14px]">location_on</span> {{ prof.cidade || 'Online' }}
+                  </span>
                 </div>
 
-                <!-- Paginação -->
-                <div class="mt-10 flex items-center justify-center gap-2">
-                    <button
-                        class="w-8 h-8 flex items-center justify-center rounded border border-slate-200 text-slate-400 hover:bg-slate-50 transition-colors">
-                        <span class="material-symbols-outlined text-[18px]">chevron_left</span>
-                    </button>
-                    <button
-                        class="w-8 h-8 flex items-center justify-center rounded bg-[#004ac6] text-white font-bold shadow hover:bg-blue-700 transition">1</button>
-                    <button
-                        class="w-8 h-8 flex items-center justify-center rounded bg-transparent text-slate-600 font-bold hover:bg-slate-50 transition border border-transparent hover:border-slate-200">2</button>
-                    <button
-                        class="w-8 h-8 flex items-center justify-center rounded border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors">
-                        <span class="material-symbols-outlined text-[18px]">chevron_right</span>
-                    </button>
+                <div class="mt-auto flex items-center justify-between">
+                  <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">A partir de</span>
+                  <span class="text-lg font-black text-slate-900">{{ prof.precoInicial | currency:'BRL' }}</span>
                 </div>
-            </section>
+              </div>
+            </div>
+          }
         </div>
-    </main>
+      </section>
+    </div>
+  </main>
 
-    <!-- Footer Componentizado -->
-    <app-footer></app-footer>
+  <app-footer></app-footer>
 </div>

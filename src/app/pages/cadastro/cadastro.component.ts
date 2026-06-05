@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
 import { AuthService } from '../../services/auth.service';
 import { CustomValidators } from '../../utils/validators';
+import { ModalService } from '../../services/modal.service';
 
 @Component({
   selector: 'app-cadastro',
@@ -22,9 +23,10 @@ export class CadastroComponent {
   errorMessage = '';
   
   showRequirements = false;
-  role: string = 'CLIENTE';
+  role: 'CLIENTE' | 'PROFISSIONAL' = 'CLIENTE';
 
   private authService = inject(AuthService);
+  private modalService = inject(ModalService);
   private router = inject(Router);
 
   togglePasswordVisibility() {
@@ -102,6 +104,15 @@ export class CadastroComponent {
       error: (err) => {
         this.isLoading = false;
         console.error('Erro ao realizar cadastro:', err);
+        if (err?.status === 409) {
+          this.modalService.alert(
+            'E-mail já cadastrado',
+            'Já existe uma conta usando este e-mail. Entre com sua senha ou use outro endereço para criar uma nova conta.',
+            'Entendi'
+          );
+          return;
+        }
+
         this.errorMessage = 'Erro ao realizar cadastro. Verifique os dados e tente novamente.';
       }
     });
@@ -111,3 +122,4 @@ export class CadastroComponent {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(email);
   }
+}

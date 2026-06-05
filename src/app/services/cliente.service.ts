@@ -1,14 +1,15 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Cliente } from '../models';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 export interface CreateClienteRequest {
-  nomeCliente: string;
-  emailCliente: string;
-  telefoneCliente?: string;
+  nome: string;
+  email?: string | null;
+  telefone: string;
+  anotacoes?: string | null;
 }
 
 @Injectable({
@@ -19,13 +20,8 @@ export class ClienteService {
   private apiUrl = `${environment.apiUrl}/clientes`;
 
   // Listar clientes do profissional logado
-  listar(params?: { page?: number; limit?: number }): Observable<{ data: Cliente[] }> {
-    let httpParams = new HttpParams();
-    if (params) {
-      if (params.page) httpParams = httpParams.set('page', params.page);
-      if (params.limit) httpParams = httpParams.set('limit', params.limit);
-    }
-    return this.http.get<{ data: Cliente[] }>(this.apiUrl, { params: httpParams })
+  listar(): Observable<Cliente[]> {
+    return this.http.get<Cliente[]>(this.apiUrl)
       .pipe(
         catchError(err => {
           console.error('Erro ao listar clientes:', err);
@@ -34,9 +30,20 @@ export class ClienteService {
       );
   }
 
+  // Obter um cliente por id
+  obter(id: string): Observable<Cliente> {
+    return this.http.get<Cliente>(`${this.apiUrl}/${id}`)
+      .pipe(
+        catchError(err => {
+          console.error('Erro ao obter cliente:', err);
+          return throwError(() => err);
+        })
+      );
+  }
+
   // Criar novo cliente
-  criar(dados: CreateClienteRequest): Observable<{ cliente: Cliente }> {
-    return this.http.post<{ cliente: Cliente }>(this.apiUrl, dados)
+  criar(dados: CreateClienteRequest): Observable<Cliente> {
+    return this.http.post<Cliente>(this.apiUrl, dados)
       .pipe(
         catchError(err => {
           console.error('Erro ao criar cliente:', err);
@@ -46,8 +53,8 @@ export class ClienteService {
   }
 
   // Atualizar cliente
-  atualizar(id: string | number, dados: Partial<CreateClienteRequest>): Observable<{ cliente: Cliente }> {
-    return this.http.put<{ cliente: Cliente }>(`${this.apiUrl}/${id}`, dados)
+  atualizar(id: string, dados: Partial<CreateClienteRequest>): Observable<Cliente> {
+    return this.http.put<Cliente>(`${this.apiUrl}/${id}`, dados)
       .pipe(
         catchError(err => {
           console.error('Erro ao atualizar cliente:', err);
@@ -57,7 +64,7 @@ export class ClienteService {
   }
 
   // Deletar cliente
-  deletar(id: string | number): Observable<{ success: boolean }> {
+  deletar(id: string): Observable<{ success: boolean }> {
     return this.http.delete<{ success: boolean }>(`${this.apiUrl}/${id}`)
       .pipe(
         catchError(err => {

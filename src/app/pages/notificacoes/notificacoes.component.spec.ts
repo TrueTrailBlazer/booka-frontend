@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { NotificacoesComponent } from './notificacoes.component';
 
@@ -8,7 +10,7 @@ describe('NotificacoesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NotificacoesComponent]
+      imports: [NotificacoesComponent, RouterTestingModule, HttpClientTestingModule]
     })
     .compileComponents();
 

@@ -3,34 +3,37 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ProfissionalService } from '../../services/profissional.service';
-import { AgendamentoService } from '../../services/agendamento.service';
+import { AgendamentoService, CreateAgendamentoPublicoRequest } from '../../services/agendamento.service';
 import { AuthService } from '../../services/auth.service';
+import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { ModalService } from '../../services/modal.service';
-import { Profissional } from '../../models';
+import { ProfissionalDetalhe, ProfissionalServico } from '../../models';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-agendar',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, FooterComponent],
+  imports: [CommonModule, FormsModule, RouterModule, FooterComponent, NavbarComponent],
   templateUrl: './agendar.component.html',
   styleUrl: './agendar.component.css'
 })
 export class AgendarComponent implements OnInit {
-  slug: string | null = null;
-  profissional: Profissional | null = null;
+  lojaId: string | null = null;
+  profissional: ProfissionalDetalhe | null = null;
   step = 1;
   isLoading = false;
   isSaving = false;
   errorMessage = '';
 
-  servicoSelecionado: any = null;
+  servicoSelecionado: ProfissionalServico | null = null;
   dataSelecionada: Date | null = null;
   horarioSelecionado: string | null = null;
 
   clienteNome: string = '';
   clienteEmail: string = '';
   clienteWhatsapp: string = '';
+  readonly apiUrl = environment.apiUrl;
 
   mesAtualNome: string = '';
   diasDoMes: (number | null)[] = [];
@@ -48,14 +51,31 @@ export class AgendarComponent implements OnInit {
   ngOnInit() {
     this.gerarCalendario(this.dataAtual);
     this.carregarProfissional();
+    this.preencherDadosUsuarioLogado();
+  }
+
+  preencherDadosUsuarioLogado() {
+    if (this.authService.isLoggedIn()) {
+      this.authService.getMe().subscribe({
+        next: (response) => {
+          if (response?.user) {
+            this.clienteNome = response.user.nome || '';
+            this.clienteEmail = response.user.email || '';
+          }
+        },
+        error: (err) => {
+          console.error('Erro ao obter dados do usuário logado:', err);
+        }
+      });
+    }
   }
 
   carregarProfissional() {
     this.route.paramMap.subscribe(params => {
-      this.slug = params.get('slug');
-      if (this.slug) {
+      this.lojaId = params.get('idLoja');
+      if (this.lojaId) {
         this.isLoading = true;
-        this.profissionalService.obterPorSlug(this.slug).subscribe({
+        this.profissionalService.obterPorId(this.lojaId).subscribe({
           next: (response) => {
             this.profissional = response;
             if (this.profissional?.servicos?.length > 0) {
@@ -113,32 +133,49 @@ export class AgendarComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
-  selecionarServico(servico: any) {
+  selecionarServico(servico: ProfissionalServico) {
     this.servicoSelecionado = servico;
+    // Recarrega slots com a duração do novo serviço, se já há data selecionada
+    if (this.dataSelecionada) {
+      this.horarioSelecionado = null;
+      this.buscarHorariosDisponiveis();
+    }
   }
 
   selecionarData(dia: number) {
     this.diaSelecionado = dia;
     this.dataSelecionada = new Date(this.dataAtual.getFullYear(), this.dataAtual.getMonth(), dia);
     this.horarioSelecionado = null;
-    
-    // Buscar horários disponíveis da API
-    if (this.slug && this.dataSelecionada) {
-      const dataFormatada = this.dataSelecionada.toISOString().split('T')[0];
-      this.profissionalService.obterDisponibilidade(this.slug, dataFormatada).subscribe({
-        next: (response) => {
-          this.horariosDisponiveis = response.slots || [];
-        },
-        error: (err) => {
-          console.error('Erro ao carregar horários:', err);
-          this.horariosDisponiveis = [];
-        }
-      });
-    }
+    this.buscarHorariosDisponiveis();
+  }
+
+  private buscarHorariosDisponiveis() {
+    if (!this.lojaId || !this.dataSelecionada) return;
+    const ano = this.dataSelecionada.getFullYear();
+    const mes = String(this.dataSelecionada.getMonth() + 1).padStart(2, '0');
+    const dia = String(this.dataSelecionada.getDate()).padStart(2, '0');
+    const dataFormatada = `${ano}-${mes}-${dia}`;
+    const servicoId = this.servicoSelecionado?.id;
+    this.profissionalService.obterDisponibilidade(this.lojaId, dataFormatada, servicoId).subscribe({
+      next: (response) => {
+        this.horariosDisponiveis = response.slots || [];
+      },
+      error: (err) => {
+        console.error('Erro ao carregar horários:', err);
+        this.horariosDisponiveis = [];
+      }
+    });
   }
 
   selecionarHorario(hora: string) {
     this.horarioSelecionado = hora;
+  }
+
+  getImageUrl(value?: string | null): string | null {
+    if (!value) return null;
+    if (/^(https?:|data:|blob:)/.test(value)) return value;
+    if (value.startsWith('/')) return `${this.apiUrl}${value}`;
+    return value;
   }
 
   finalizarAgendamento() {
@@ -147,22 +184,29 @@ export class AgendarComponent implements OnInit {
       return;
     }
 
-    if (!this.clienteNome || !this.clienteEmail || !this.clienteWhatsapp) {
-      this.modalService.alert("Atenção", "Preencha seus dados (nome, email e WhatsApp) para continuar.");
+    if (!this.clienteNome || !this.clienteWhatsapp) {
+      this.modalService.alert("Atenção", "Preencha seu nome e WhatsApp para continuar.");
       return;
     }
 
     this.isSaving = true;
-    const dataFormatada = this.dataSelecionada.toISOString().split('T')[0];
+    // Constrói a data usando o ano/mês/dia local (não UTC) + horário selecionado
+    const ano = this.dataSelecionada.getFullYear();
+    const mes = String(this.dataSelecionada.getMonth() + 1).padStart(2, '0');
+    const dia = String(this.dataSelecionada.getDate()).padStart(2, '0');
+    // Cria o Date com hora local e converte para ISO com offset correto
+    const dataHoraLocal = new Date(`${ano}-${mes}-${dia}T${this.horarioSelecionado}:00`);
+    const inicioIso = dataHoraLocal.toISOString();
     
-    const dados = {
-      servico_id: this.servicoSelecionado.id,
-      profissional_id: this.profissional?.id,
-      cliente_nome: this.clienteNome,
-      cliente_email: this.clienteEmail,
-      cliente_telefone: this.clienteWhatsapp,
-      data_hora: `${dataFormatada}T${this.horarioSelecionado}:00`,
-      modalidade: this.profissional?.modalidades?.[0] || 'PRESENCIAL'
+    const dados: CreateAgendamentoPublicoRequest = {
+      lojaId: this.lojaId!,
+      servicoId: this.servicoSelecionado.id,
+      inicio: inicioIso,
+      cliente: {
+        nome: this.clienteNome,
+        email: this.clienteEmail || null,
+        telefone: this.clienteWhatsapp,
+      }
     };
 
     this.agendamentoService.criarPublico(dados).subscribe({

@@ -3,6 +3,7 @@ import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -33,15 +34,21 @@ export class LoginComponent {
       return;
     }
 
-
-
     this.isLoading = true;
-    this.authService.login(this.email, this.password).subscribe({
-      next: () => {
+    this.authService.login(this.email, this.password).pipe(
+      switchMap(() => this.authService.getMe())
+    ).subscribe({
+      next: (meResponse) => {
         this.isLoading = false;
-        const role = this.authService.getRole();
+        const role = meResponse.user.role;
+        
         if (role === 'PROFISSIONAL') {
-          this.router.navigate(['/dashboard']);
+          // Verificar se onboarding foi concluído
+          if (meResponse.loja && !meResponse.loja.onboardingConcluido) {
+            this.router.navigate(['/onboarding']);
+          } else {
+            this.router.navigate(['/dashboard']);
+          }
         } else {
           this.router.navigate(['/explorar']);
         }

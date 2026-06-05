@@ -1,10 +1,18 @@
 export interface Usuario {
-  id?: number | string;
+  id: string;
   nome: string;
   email: string;
-  senha?: string;
-  role?: string;
-  lojaId?: number | string;
-  criadoEm?: Date | string;
-  atualizadoEm?: Date | string;
+  role: 'CLIENTE' | 'PROFISSIONAL';
+  imagemUrl?: string | null;
+}
+
+export interface LojaContext {
+  id: string;
+  nome: string;
+  onboardingConcluido: boolean;
+}
+
+export interface MeResponse {
+  user: Usuario;
+  loja: LojaContext | null;
 }

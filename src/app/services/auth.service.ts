@@ -1,8 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { tap, switchMap, catchError } from 'rxjs/operators';
+import { tap, catchError } from 'rxjs/operators';
 import { throwError, Observable } from 'rxjs';
+import { MeResponse } from '../models';
 
 export interface AuthResponse {
   token: string;
@@ -63,8 +64,22 @@ export class AuthService {
       );
   }
 
-  getMe(): Observable<{ user: any }> {
-    return this.http.get<{ user: any }>(`${this.apiUrl}/auth/me`);
+  getMe(): Observable<MeResponse> {
+    return this.http.get<MeResponse>(`${this.apiUrl}/auth/me`);
+  }
+
+  updateMe(payload: { nome?: string; email?: string }): Observable<{ id: string; nome: string; email: string; role: string }> {
+    return this.http.put<{ id: string; nome: string; email: string; role: string }>(`${this.apiUrl}/auth/me`, payload);
+  }
+
+  updateSenha(senhaAtual: string, novaSenha: string): Observable<{ message: string }> {
+    return this.http.put<{ message: string }>(`${this.apiUrl}/auth/senha`, { senhaAtual, novaSenha });
+  }
+
+  uploadAvatar(file: File): Observable<{ imagemUrl: string }> {
+    const form = new FormData();
+    form.append('avatar', file);
+    return this.http.post<{ imagemUrl: string }>(`${this.apiUrl}/upload/avatar`, form);
   }
 
   logout(): void {

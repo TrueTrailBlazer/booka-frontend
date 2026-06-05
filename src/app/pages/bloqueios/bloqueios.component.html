@@ -1,125 +1,199 @@
 <div class="bg-slate-50 font-sans text-slate-900 antialiased h-screen flex flex-col overflow-hidden">
-  
   <app-navbar></app-navbar>
 
   <div class="flex-1 flex overflow-hidden pt-20">
     <app-sidebar></app-sidebar>
 
     <div class="flex-1 flex flex-col min-w-0">
-      
       <app-topbar></app-topbar>
 
-    <main class="flex-1 overflow-y-auto p-8 space-y-8">
-      
-      <div class="w-full">
+      <main class="flex-1 overflow-y-auto p-4 md:p-8 space-y-8 bg-surface/50">
         
-        <a routerLink="/configuracoes" class="inline-flex items-center gap-2 text-slate-500 hover:text-indigo-600 text-sm font-semibold mb-6 transition-colors cursor-pointer group">
-          <span class="material-symbols-outlined text-[18px] group-hover:-translate-x-1 transition-transform">arrow_back</span>
-          Voltar para Configurações
-        </a>
-
-        <div class="mb-8">
-          <h2 class="text-2xl font-bold text-slate-900">Bloqueios e Férias</h2>
-          <p class="text-slate-500 mt-1">Gerencie os períodos de indisponibilidade da sua agenda.</p>
+        <div class="mb-8 flex items-start gap-3">
+          <a routerLink="/configuracoes" class="btn btn-circle btn-ghost btn-sm mt-1 text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 transition-colors" title="Voltar para Configurações">
+            <span class="material-symbols-outlined text-[22px]">arrow_back</span>
+          </a>
+          <div>
+            <h1 class="text-3xl font-black text-slate-900 tracking-tight">Bloqueios e Férias</h1>
+            <p class="text-slate-500 font-medium mt-1">Gerencie os períodos de indisponibilidade da sua agenda.</p>
+          </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-          <div class="p-6 border-b border-slate-100">
-            <h3 class="text-lg font-bold text-slate-800">Bloquear Agenda</h3>
-            <p class="text-sm text-slate-500">Preencha as informações abaixo para criar um novo bloqueio.</p>
-          </div>
-
-          <form class="p-8 space-y-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div class="space-y-2">
-                <label class="text-sm font-semibold text-slate-700">Data Inicial</label>
-                <div class="relative">
-                  <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">calendar_today</span>
-                  <input class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" type="date"/>
-                </div>
-              </div>
-              <div class="space-y-2">
-                <label class="text-sm font-semibold text-slate-700">Data Final</label>
-                <div class="relative">
-                  <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">calendar_today</span>
-                  <input class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" type="date"/>
-                </div>
-              </div>
-
-              <div class="space-y-2">
-                <label class="text-sm font-semibold text-slate-700">Hora Início</label>
-                <div class="relative">
-                  <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">schedule</span>
-                  <input class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" type="time"/>
-                </div>
-              </div>
-              <div class="space-y-2">
-                <label class="text-sm font-semibold text-slate-700">Hora Fim</label>
-                <div class="relative">
-                  <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">schedule</span>
-                  <input class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" type="time"/>
-                </div>
-              </div>
-
-              <div class="md:col-span-2 space-y-2">
-                <label class="text-sm font-semibold text-slate-700">Motivo</label>
-                <div class="relative">
-                  <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">info</span>
-                  <select class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all appearance-none">
-                    <option disabled="" selected="" value="">Selecione um motivo</option>
-                    <option value="lunch">Horário de Almoço</option>
-                    <option value="vacation">Férias</option>
-                    <option value="renovation">Reforma</option>
-                    <option value="personal">Assuntos Pessoais</option>
-                    <option value="holiday">Feriado Local</option>
-                  </select>
-                </div>
-              </div>
+        <!-- Stats Cards -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div class="stat bg-white rounded-3xl border border-slate-200 shadow-sm p-5 flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 shrink-0">
+              <span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">event_busy</span>
             </div>
-
-            <div class="pt-6 flex justify-end items-center border-t border-slate-100 mt-6">
-              <button class="px-6 py-2.5 text-sm font-medium text-slate-600 hover:text-slate-900 mr-4 transition-colors" type="button">Cancelar</button>
-              <button class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-8 py-2.5 rounded-xl transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2" type="submit">
-                <span class="material-symbols-outlined text-xl">lock</span>
-                Bloquear Agenda
-              </button>
-            </div>
-          </form>
-        </div>
-
-        <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div class="p-5 bg-white border border-slate-200 rounded-xl flex items-center gap-4 shadow-sm hover:shadow-md transition-shadow">
-            <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
-              <span class="material-symbols-outlined text-2xl">restaurant</span>
-            </div>
-            <div>
-              <p class="text-xs text-slate-500 uppercase font-bold tracking-wider mb-0.5">Próximo Bloqueio</p>
-              <p class="text-sm font-bold text-slate-800">Almoço - Hoje</p>
+            <div class="flex-1">
+              <div class="text-slate-500 font-bold text-xs uppercase tracking-widest mb-0.5">Total de Bloqueios</div>
+              <div class="text-slate-800 text-3xl font-black">{{ totalBloqueios }}</div>
             </div>
           </div>
+
+          <div class="stat bg-white rounded-3xl border border-slate-200 shadow-sm p-5 flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600 shrink-0">
+              <span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">upcoming</span>
+            </div>
+            <div class="flex-1">
+              <div class="text-slate-500 font-bold text-xs uppercase tracking-widest mb-0.5">Bloqueios Futuros</div>
+              <div class="text-slate-800 text-3xl font-black">{{ bloqueiosFuturos }}</div>
+            </div>
+          </div>
+
+          <div class="stat bg-white rounded-3xl border border-slate-200 shadow-sm p-5 flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 shrink-0">
+              <span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">schedule</span>
+            </div>
+            <div class="flex-1">
+              <div class="text-slate-500 font-bold text-xs uppercase tracking-widest mb-0.5">Próximo Bloqueio</div>
+              <div class="text-slate-800 text-sm font-black mt-1">
+                @if (proximoBloqueio) {
+                  {{ proximoBloqueio.motivo || 'Sem motivo' }}
+                } @else {
+                  <span class="text-slate-400 font-medium">Nenhum</span>
+                }
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Grid Principal -->
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 items-stretch">
           
-          <div class="p-5 bg-white border border-slate-200 rounded-xl flex items-center gap-4 shadow-sm hover:shadow-md transition-shadow">
-            <div class="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600">
-              <span class="material-symbols-outlined text-2xl">flight</span>
+          <!-- Formulário Novo Bloqueio -->
+          <div class="lg:col-span-3 bg-white rounded-3xl border border-slate-200 shadow-sm flex flex-col overflow-hidden">
+            <div class="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/30">
+              <div>
+                <h3 class="text-lg font-black text-slate-800">Novo Bloqueio</h3>
+                <p class="text-sm font-medium text-slate-500">Adicione uma pausa ou período de férias.</p>
+              </div>
             </div>
-            <div>
-              <p class="text-xs text-slate-500 uppercase font-bold tracking-wider mb-0.5">Férias Agendadas</p>
-              <p class="text-sm font-bold text-slate-800">15 - 20 Ago</p>
-            </div>
-          </div>
-          
-          <div class="p-5 bg-white border border-slate-200 rounded-xl flex items-center gap-4 shadow-sm hover:shadow-md transition-shadow">
-            <div class="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600">
-              <span class="material-symbols-outlined text-2xl">construction</span>
-            </div>
-            <div>
-              <p class="text-xs text-slate-500 uppercase font-bold tracking-wider mb-0.5">Manutenção</p>
-              <p class="text-sm font-bold text-slate-800">02 Outubro</p>
-            </div>
-          </div>
-        </div>
 
-      </div>
-    </main>
+            <div class="p-6 md:p-8 space-y-8 flex-1 flex flex-col">
+              <!-- Presets -->
+              <div class="flex flex-wrap gap-3">
+                <button (click)="aplicarPreset('ferias')" type="button" class="btn bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 font-bold rounded-xl shadow-sm">
+                  <span class="material-symbols-outlined text-blue-600 text-[18px]">beach_access</span> Preencher Férias
+                </button>
+                <button (click)="aplicarPreset('almoco')" type="button" class="btn bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 font-bold rounded-xl shadow-sm">
+                  <span class="material-symbols-outlined text-orange-500 text-[18px]">restaurant</span> Preencher Almoço
+                </button>
+              </div>
+
+              <!-- Campos -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1">
+                <div class="space-y-2">
+                  <label class="text-xs font-black uppercase tracking-widest text-slate-500">Data Inicial</label>
+                  <div class="relative">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">calendar_today</span>
+                    <input name="dataInicio" [(ngModel)]="form.dataInicio" class="input input-bordered w-full pl-10 bg-slate-50 font-medium text-slate-700" type="date"/>
+                  </div>
+                </div>
+                <div class="space-y-2">
+                  <label class="text-xs font-black uppercase tracking-widest text-slate-500">Data Final</label>
+                  <div class="relative">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">calendar_today</span>
+                    <input name="dataFim" [(ngModel)]="form.dataFim" class="input input-bordered w-full pl-10 bg-slate-50 font-medium text-slate-700" type="date"/>
+                  </div>
+                </div>
+
+                <div class="space-y-2">
+                  <label class="text-xs font-black uppercase tracking-widest text-slate-500">Hora Início</label>
+                  <div class="relative">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">schedule</span>
+                    <input name="horaInicio" [(ngModel)]="form.horaInicio" class="input input-bordered w-full pl-10 bg-slate-50 font-medium text-slate-700" type="time"/>
+                  </div>
+                </div>
+                <div class="space-y-2">
+                  <label class="text-xs font-black uppercase tracking-widest text-slate-500">Hora Fim</label>
+                  <div class="relative">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">schedule</span>
+                    <input name="horaFim" [(ngModel)]="form.horaFim" class="input input-bordered w-full pl-10 bg-slate-50 font-medium text-slate-700" type="time"/>
+                  </div>
+                </div>
+
+                <div class="md:col-span-2 space-y-2">
+                  <label class="text-xs font-black uppercase tracking-widest text-slate-500">Motivo</label>
+                  <div class="relative">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">info</span>
+                    <select name="motivo" [(ngModel)]="form.motivo" class="select select-bordered w-full pl-10 bg-slate-50 font-medium text-slate-700">
+                      <option value="Férias">Férias</option>
+                      <option value="Almoço">Horário de Almoço</option>
+                      <option value="Reforma">Reforma</option>
+                      <option value="Assuntos Pessoais">Assuntos Pessoais</option>
+                      <option value="Feriado">Feriado Local</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Ações do Formulário -->
+              <div class="pt-6 flex flex-col sm:flex-row gap-3 border-t border-slate-100 mt-auto justify-between items-center">
+                <button (click)="limparForm()" [disabled]="isSaving" class="btn btn-ghost font-bold text-slate-500 w-full sm:w-auto" type="button">Limpar</button>
+                
+                <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                  <button (click)="salvarBloqueio()" [disabled]="isSaving" class="btn btn-primary text-white font-bold rounded-xl gap-2 shadow-md shadow-primary/20 w-full sm:w-auto" type="button">
+                    @if (isSaving) {
+                      <span class="loading loading-spinner loading-sm"></span> Salvando...
+                    } @else {
+                      <span class="material-symbols-outlined text-[18px]">lock</span> Salvar Este Bloqueio
+                    }
+                  </button>
+
+                  <button (click)="bloquearAlmocoDiasUteis()" [disabled]="isSaving" class="btn bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl border-none gap-2 w-full sm:w-auto" type="button" title="Repete o bloqueio para todos os dias úteis entre a Data Inicial e Final">
+                    <span class="material-symbols-outlined text-[18px]">auto_mode</span> Repetir em Dias Úteis
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Lista de Bloqueios Cadastrados -->
+          <div class="lg:col-span-2 bg-white rounded-3xl border border-slate-200 shadow-sm flex flex-col overflow-hidden">
+            <div class="p-6 border-b border-slate-100 bg-slate-50/30">
+              <h3 class="text-lg font-black text-slate-800">Registros</h3>
+              <p class="text-sm font-medium text-slate-500">Períodos bloqueados</p>
+            </div>
+
+            <div class="p-2 flex-1 overflow-y-auto">
+              @if (isLoading) {
+                <div class="flex items-center justify-center py-12">
+                  <span class="loading loading-spinner text-primary loading-md"></span>
+                </div>
+              } @else if (bloqueios.length === 0) {
+                <div class="flex flex-col items-center justify-center h-full py-16 text-slate-400">
+                  <span class="material-symbols-outlined text-[40px] mb-2 text-slate-200" style="font-variation-settings: 'FILL' 1;">event_available</span>
+                  <p class="text-sm font-bold text-slate-500">Nenhum bloqueio</p>
+                </div>
+              } @else {
+                <div class="flex flex-col gap-1">
+                  @for (bloqueio of bloqueios; track bloqueio.id) {
+                    <div class="flex items-center justify-between p-4 hover:bg-slate-50 rounded-2xl transition-colors group">
+                      <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0" 
+                             [ngClass]="bloqueio.motivo === 'Almoço' ? 'bg-orange-50 text-orange-500' : (bloqueio.motivo === 'Férias' ? 'bg-blue-50 text-blue-500' : 'bg-red-50 text-red-500')">
+                          <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">
+                            {{ bloqueio.motivo === 'Almoço' ? 'restaurant' : (bloqueio.motivo === 'Férias' ? 'beach_access' : 'block') }}
+                          </span>
+                        </div>
+                        <div>
+                          <p class="font-black text-slate-800 text-sm">{{ bloqueio.motivo || 'Sem motivo' }}</p>
+                          <p class="text-xs font-medium text-slate-500">{{ formatarPeriodo(bloqueio.inicio, bloqueio.fim) }}</p>
+                        </div>
+                      </div>
+                      <button (click)="deletarBloqueio(bloqueio.id)" class="btn btn-sm btn-ghost btn-circle text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors opacity-0 group-hover:opacity-100" title="Remover">
+                        <span class="material-symbols-outlined text-[18px]">delete</span>
+                      </button>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+
+        </div>
+      </main>
+    </div>
   </div>
 </div>

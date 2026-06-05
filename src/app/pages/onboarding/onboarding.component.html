@@ -1,19 +1,23 @@
 <div class="min-h-screen flex flex-col items-center bg-slate-50 font-sans text-slate-900 antialiased relative overflow-hidden">
-  
-  <div class="absolute top-0 left-0 h-1.5 bg-indigo-600 transition-all duration-500 ease-in-out" 
-       [style.width]="step === 1 ? '50%' : '100%'"></div>
+
+  <!-- Barra de progresso -->
+  <div class="absolute top-0 left-0 h-1.5 bg-indigo-600 transition-all duration-500 ease-in-out"
+       [style.width]="step === 1 ? '33%' : step === 2 ? '66%' : '100%'"></div>
 
   <div class="w-full max-w-[960px] flex flex-col items-center px-4 py-12 md:py-16">
-    
+
+    <!-- Logo -->
     <div class="mb-12 flex items-center gap-3">
       <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-600/20">
         <svg class="w-6 h-6" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><rect fill="#4f46e5" height="64" rx="18" width="64"></rect><g transform="translate(8, 8)"><path clip-rule="evenodd" d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z" fill="#FFFFFF" fill-rule="evenodd"></path></g></svg>
       </div>
       <span class="text-2xl font-black tracking-tight text-slate-900">Booka</span>
     </div>
-    
+
+    <!-- PASSO 1: Categoria -->
     <div *ngIf="step === 1" class="w-full flex flex-col items-center animate-[fadeIn_0.4s_ease-in-out]">
       <div class="text-center mb-10">
+        <p class="text-xs font-bold text-indigo-600 uppercase tracking-widest mb-2">Passo 1 de 3</p>
         <h1 class="text-3xl md:text-4xl font-black tracking-tight mb-3 text-slate-900">
           Bem-vindo ao Booka! Qual o seu negócio?
         </h1>
@@ -21,9 +25,9 @@
           Selecione a categoria do seu estabelecimento para personalizarmos o seu painel.
         </p>
       </div>
-      
+
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full mb-12">
-        <button (click)="selectCategory('barbearia', 'Barbearia', 'sua')" 
+        <button (click)="selectCategory('barbearia', 'Barbearia', 'sua')"
                 [ngClass]="selectedCategory === 'barbearia' ? 'border-indigo-600 ring-4 ring-indigo-600/10 shadow-lg scale-105' : 'border-transparent hover:border-indigo-600/50 hover:shadow-md'"
                 class="group flex flex-col items-center p-8 bg-white rounded-xl shadow-sm border-2 transition-all duration-300 focus:outline-none">
           <div [ngClass]="selectedCategory === 'barbearia' ? 'bg-indigo-600 text-white' : 'bg-indigo-50 text-indigo-600 group-hover:scale-110'"
@@ -32,8 +36,8 @@
           </div>
           <span class="text-lg font-bold text-slate-900">Barbearia</span>
         </button>
-        
-        <button (click)="selectCategory('lavajato', 'Lava-Jato', 'seu')" 
+
+        <button (click)="selectCategory('lavajato', 'Lava-Jato', 'seu')"
                 [ngClass]="selectedCategory === 'lavajato' ? 'border-indigo-600 ring-4 ring-indigo-600/10 shadow-lg scale-105' : 'border-transparent hover:border-indigo-600/50 hover:shadow-md'"
                 class="group flex flex-col items-center p-8 bg-white rounded-xl shadow-sm border-2 transition-all duration-300 focus:outline-none">
           <div [ngClass]="selectedCategory === 'lavajato' ? 'bg-indigo-600 text-white' : 'bg-indigo-50 text-indigo-600 group-hover:scale-110'"
@@ -42,8 +46,8 @@
           </div>
           <span class="text-lg font-bold text-slate-900">Lava-Jato</span>
         </button>
-        
-        <button (click)="selectCategory('salao', 'Salão de Beleza', 'seu')" 
+
+        <button (click)="selectCategory('salao', 'Salão de Beleza', 'seu')"
                 [ngClass]="selectedCategory === 'salao' ? 'border-indigo-600 ring-4 ring-indigo-600/10 shadow-lg scale-105' : 'border-transparent hover:border-indigo-600/50 hover:shadow-md'"
                 class="group flex flex-col items-center p-8 bg-white rounded-xl shadow-sm border-2 transition-all duration-300 focus:outline-none">
           <div [ngClass]="selectedCategory === 'salao' ? 'bg-indigo-600 text-white' : 'bg-indigo-50 text-indigo-600 group-hover:scale-110'"
@@ -52,8 +56,8 @@
           </div>
           <span class="text-lg font-bold text-slate-900">Salão</span>
         </button>
-        
-        <button (click)="selectCategory('outros', 'Negócio', 'seu')" 
+
+        <button (click)="selectCategory('outros', 'Negócio', 'seu')"
                 [ngClass]="selectedCategory === 'outros' ? 'border-indigo-600 ring-4 ring-indigo-600/10 shadow-lg scale-105' : 'border-transparent hover:border-indigo-600/50 hover:shadow-md'"
                 class="group flex flex-col items-center p-8 bg-white rounded-xl shadow-sm border-2 transition-all duration-300 focus:outline-none">
           <div [ngClass]="selectedCategory === 'outros' ? 'bg-indigo-600 text-white' : 'bg-indigo-50 text-indigo-600 group-hover:scale-110'"
@@ -74,48 +78,136 @@
       </div>
     </div>
 
+    <!-- PASSO 2: Dados do Estabelecimento -->
     <div *ngIf="step === 2" class="w-full max-w-2xl flex flex-col items-center animate-[fadeIn_0.4s_ease-in-out]">
-      
       <div class="text-center mb-8 w-full">
+        <p class="text-xs font-bold text-indigo-600 uppercase tracking-widest mb-2">Passo 2 de 3</p>
         <h1 class="text-3xl md:text-4xl font-black tracking-tight mb-3 text-slate-900">
           Como se chama {{ categoryArticle }} <span class="text-indigo-600">{{ categoryName }}</span>?
         </h1>
         <p class="text-slate-500 text-lg mx-auto font-medium">
-          Preencha os dados abaixo. Essas informações serão visíveis para os seus clientes.
+          Preencha as informações básicas do seu estabelecimento.
         </p>
       </div>
 
       <div class="w-full bg-white p-8 rounded-2xl shadow-xl shadow-slate-900/5 border border-slate-100 space-y-6">
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="md:col-span-2">
-            <label class="block text-sm font-bold text-slate-900 mb-2">Nome do Estabelecimento <span class="text-red-500">*</span></label>
-            <input [(ngModel)]="storeName" name="storeName" type="text" placeholder="Ex: Booka Barber & Co." 
-                   class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none font-medium text-slate-900 placeholder:font-normal">
-          </div>
+        <div>
+          <label class="block text-sm font-bold text-slate-900 mb-2">Nome do Estabelecimento <span class="text-red-500">*</span></label>
+          <input [(ngModel)]="storeName" name="storeName" type="text" placeholder="Ex: Booka Barber & Co."
+                 class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none font-medium text-slate-900 placeholder:font-normal"/>
+        </div>
 
-          <div class="md:col-span-2">
-            <label class="block text-sm font-bold text-slate-900 mb-2">WhatsApp de Contato</label>
-            <div class="relative">
-              <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-medium">+55</span>
-              <input [(ngModel)]="storePhone" name="storePhone" type="tel" placeholder="(11) 90000-0000" 
-                     class="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none font-medium text-slate-900 placeholder:font-normal">
-            </div>
-          </div>
-
-          <div class="md:col-span-2">
-            <label class="block text-sm font-bold text-slate-900 mb-2">Endereço Completo <span class="text-red-500">*</span></label>
-            <textarea [(ngModel)]="storeAddress" name="storeAddress" rows="3" placeholder="Rua, Número, Bairro, Cidade - Estado" 
-                      class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none font-medium text-slate-900 placeholder:font-normal resize-none"></textarea>
+        <div>
+          <label class="block text-sm font-bold text-slate-900 mb-2">WhatsApp de Contato <span class="text-red-500">*</span></label>
+          <div class="relative">
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-medium">+55</span>
+            <input [(ngModel)]="storePhone" name="storePhone" type="tel" placeholder="(11) 90000-0000"
+                   class="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none font-medium text-slate-900 placeholder:font-normal"/>
           </div>
         </div>
-        
-        <div class="bg-indigo-50 p-4 rounded-xl flex items-start gap-3 mt-2 border border-indigo-100">
-          <span class="material-symbols-outlined text-indigo-500 mt-0.5">map</span>
-          <div>
-            <p class="text-xs font-bold text-indigo-900 uppercase tracking-wide">Localização Automática</p>
-            <p class="text-xs text-indigo-700 mt-0.5">As coordenadas do mapa serão detectadas automaticamente a partir deste endereço.</p>
+      </div>
+
+      <div class="w-full flex justify-between items-center pt-8 mt-4">
+        <button (click)="prevStep()" class="flex items-center gap-2 px-4 py-2 text-slate-500 hover:text-indigo-600 font-bold transition-colors">
+          <span class="material-symbols-outlined text-lg">arrow_back</span>
+          Voltar
+        </button>
+        <button (click)="nextStep()" [disabled]="!storeName || !storePhone"
+                [ngClass]="(storeName && storePhone) ? 'bg-indigo-600 hover:bg-indigo-700 shadow-indigo-600/20 hover:-translate-y-0.5' : 'bg-slate-300 text-slate-500 cursor-not-allowed opacity-70'"
+                class="flex items-center justify-center gap-2 rounded-xl h-14 px-8 text-white text-base font-bold transition-all shadow-lg">
+          <span>Próximo Passo</span>
+          <span class="material-symbols-outlined">arrow_forward</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- PASSO 3: Endereço via CEP -->
+    <div *ngIf="step === 3" class="w-full max-w-2xl flex flex-col items-center animate-[fadeIn_0.4s_ease-in-out]">
+      <div class="text-center mb-8 w-full">
+        <p class="text-xs font-bold text-indigo-600 uppercase tracking-widest mb-2">Passo 3 de 3</p>
+        <h1 class="text-3xl md:text-4xl font-black tracking-tight mb-3 text-slate-900">
+          Onde fica <span class="text-indigo-600">{{ categoryArticle }} {{ categoryName }}</span>?
+        </h1>
+        <p class="text-slate-500 text-lg mx-auto font-medium">
+          Digite o CEP e os dados serão preenchidos automaticamente.
+        </p>
+      </div>
+
+      <div class="w-full bg-white p-8 rounded-2xl shadow-xl shadow-slate-900/5 border border-slate-100 space-y-5">
+
+        <!-- CEP -->
+        <div>
+          <label class="block text-sm font-bold text-slate-900 mb-2">CEP <span class="text-red-500">*</span></label>
+          <div class="relative">
+            <input [value]="storeCep" (input)="onCepInput($any($event.target).value)" name="storeCep"
+                   type="text" placeholder="00000-000" maxlength="9"
+                   class="w-full px-4 py-3.5 bg-slate-50 border rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none font-medium text-slate-900 placeholder:font-normal"
+                   [ngClass]="cepNaoEncontrado ? 'border-red-400' : 'border-slate-200'"/>
+            <div *ngIf="isBuscandoCep" class="absolute right-4 top-1/2 -translate-y-1/2">
+              <svg class="animate-spin h-5 w-5 text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            </div>
+            <span *ngIf="cepPreenchido && !isBuscandoCep" class="absolute right-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-emerald-500">check_circle</span>
           </div>
+          <p *ngIf="cepNaoEncontrado" class="text-xs text-red-500 mt-1.5 font-medium">CEP não encontrado. Verifique e tente novamente.</p>
+        </div>
+
+        <!-- Logradouro + Número -->
+        <div class="grid grid-cols-3 gap-4">
+          <div class="col-span-2">
+            <label class="block text-sm font-bold text-slate-900 mb-2">Logradouro <span class="text-red-500">*</span></label>
+            <input [(ngModel)]="storeLogradouro" name="storeLogradouro" type="text" placeholder="Rua, Av., Travessa..."
+                   class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none font-medium text-slate-900 placeholder:font-normal"/>
+          </div>
+          <div>
+            <label class="block text-sm font-bold text-slate-900 mb-2">Número <span class="text-red-500">*</span></label>
+            <input [(ngModel)]="storeNumero" name="storeNumero" type="text" placeholder="123"
+                   class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none font-medium text-slate-900 placeholder:font-normal"/>
+          </div>
+        </div>
+
+        <!-- Bairro + Complemento -->
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-bold text-slate-900 mb-2">Bairro <span class="text-red-500">*</span></label>
+            <input [(ngModel)]="storeBairro" name="storeBairro" type="text" placeholder="Centro"
+                   class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none font-medium text-slate-900 placeholder:font-normal"/>
+          </div>
+          <div>
+            <label class="block text-sm font-bold text-slate-900 mb-2">Complemento</label>
+            <input [(ngModel)]="storeComplemento" name="storeComplemento" type="text" placeholder="Sala, Andar, Apt..."
+                   class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none font-medium text-slate-900 placeholder:font-normal"/>
+          </div>
+        </div>
+
+        <!-- Cidade + Estado -->
+        <div class="grid grid-cols-3 gap-4">
+          <div class="col-span-2">
+            <label class="block text-sm font-bold text-slate-900 mb-2">Cidade <span class="text-red-500">*</span></label>
+            <input [(ngModel)]="storeCidade" name="storeCidade" type="text" placeholder="São Paulo"
+                   class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none font-medium text-slate-900 placeholder:font-normal"/>
+          </div>
+          <div>
+            <label class="block text-sm font-bold text-slate-900 mb-2">Estado <span class="text-red-500">*</span></label>
+            <input [(ngModel)]="storeEstado" name="storeEstado" type="text" placeholder="SP" maxlength="2"
+                   class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none font-medium text-slate-900 placeholder:font-normal uppercase"/>
+          </div>
+        </div>
+
+        <!-- Dica -->
+        <div class="bg-indigo-50 p-4 rounded-xl flex items-start gap-3 border border-indigo-100">
+          <span class="material-symbols-outlined text-indigo-500 mt-0.5">location_on</span>
+          <div>
+            <p class="text-xs font-bold text-indigo-900 uppercase tracking-wide">Dica</p>
+            <p class="text-xs text-indigo-700 mt-0.5">Todos os campos são editáveis. O CEP preenche automaticamente o logradouro, bairro, cidade e estado.</p>
+          </div>
+        </div>
+
+        <!-- Erro geral -->
+        <div *ngIf="errorMessage" class="bg-red-50 border border-red-200 rounded-xl p-4">
+          <p class="text-sm text-red-600 font-medium">{{ errorMessage }}</p>
         </div>
 
       </div>
@@ -126,14 +218,18 @@
           Voltar
         </button>
 
-        <button (click)="nextStep()" [disabled]="!storeName || !storeAddress"
-                [ngClass]="(storeName && storeAddress) ? 'bg-emerald-500 hover:bg-emerald-600 shadow-emerald-500/20 hover:-translate-y-0.5' : 'bg-slate-300 text-slate-500 cursor-not-allowed opacity-70'"
+        <button (click)="nextStep()" [disabled]="!enderecoValido || isLoading"
+                [ngClass]="(enderecoValido && !isLoading) ? 'bg-emerald-500 hover:bg-emerald-600 shadow-emerald-500/20 hover:-translate-y-0.5' : 'bg-slate-300 text-slate-500 cursor-not-allowed opacity-70'"
                 class="flex items-center justify-center gap-2 rounded-xl h-14 px-8 text-white text-base font-bold transition-all shadow-lg">
-          <span class="material-symbols-outlined text-xl">check_circle</span>
-          <span>Finalizar e Acessar Painel</span>
+          <svg *ngIf="isLoading" class="animate-spin h-5 w-5 text-white mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span class="material-symbols-outlined text-xl" *ngIf="!isLoading">check_circle</span>
+          <span>{{ isLoading ? 'Salvando...' : 'Finalizar e Acessar Painel' }}</span>
         </button>
       </div>
     </div>
-    
+
   </div>
 </div>

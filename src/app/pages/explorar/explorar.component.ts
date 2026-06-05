@@ -9,6 +9,7 @@ import { AuthService } from '../../services/auth.service';
 import { ModalService } from '../../services/modal.service';
 import { ProfissionalService } from '../../services/profissional.service';
 import { Profissional } from '../../models';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-explorar',
@@ -17,64 +18,88 @@ import { Profissional } from '../../models';
   templateUrl: './explorar.component.html'
 })
 export class ExplorarComponent implements OnInit {
-  termoBusca: string = '';
-  cidadeBusca: string = '';
-  
-  // Filtros
-  precomax: number = 500;
-  avaliacaoMinima: number = 0;
-  modalidade: string = 'todas';
-  
+  termoBusca = '';
+  cidadeBusca = '';
+
+  precomax = 500;
+  avaliacaoMinima = 0;
+  modalidade = 'todas';
+
   categorias: { [key: string]: boolean } = {
-    'Consultoria': false,
-    'Educação': false,
-    'Casa': false,
-    'Saúde': false,
-    'Espaços': false
+    Consultoria: false,
+    Educação: false,
+    Beleza: false,
+    'Bem-Estar e Saúde': false,
+    Casa: false,
   };
 
   tiposVendedor: { [key: string]: boolean } = {
-    'Autônomo': true,
-    'Empresa': true,
+    Autônomo: true,
+    Empresa: true,
   };
 
   profissionais: Profissional[] = [];
   isLoading = true;
   errorMessage = '';
-  
+  readonly apiUrl = environment.apiUrl;
+
   private profissionalService = inject(ProfissionalService);
   private authService = inject(AuthService);
   private modalService = inject(ModalService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
 
   get profissionaisFiltrados() {
-    return this.profissionais.filter(p => {
-      // 1. Busca textual
-      const normalizar = (str: string) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    return this.profissionais.filter((profissional) => {
+      const normalizar = (str: string) =>
+        str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+
       const termo = normalizar(this.termoBusca);
-      const bateTermo = !termo || normalizar(p.nome || '').includes(termo) || normalizar(p.especialidade || '').includes(termo);
-      
-      // 2. Preço Máximo
-      const precoMedio = p.preco_medio || 0;
-      const batePreco = precoMedio <= this.precomax;
+      const bateTermo =
+        !termo ||
+        normalizar(profissional.nome || '').includes(termo) ||
+        normalizar(profissional.profissao || '').includes(termo);
 
-      // 3. Avaliação
-      const rating = p.rating || 0;
-      const bateAvaliacao = rating >= this.avaliacaoMinima;
+      const cidade = normalizar(this.cidadeBusca);
+      const bateCidade = !cidade || normalizar(profissional.cidade || '').includes(cidade);
 
-      // 4. Modalidade
-      const modalidades = p.modalidades || [];
-      const bateModalidade = this.modalidade === 'todas' || modalidades.includes(this.modalidade);
+      const batePreco = profissional.precoInicial <= this.precomax;
+      const bateAvaliacao = profissional.rating >= this.avaliacaoMinima;
+      const bateModalidade =
+        this.modalidade === 'todas' || profissional.modalidade === this.modalidade.toUpperCase();
 
-      // 5. Categorias (se nenhuma selecionada, ignora filtro de categoria)
-      const catsAtivas = Object.keys(this.categorias).filter(k => this.categorias[k]);
-      const bateCategoria = catsAtivas.length === 0 || catsAtivas.includes(p.categoria || '');
+      const categoriasAtivas = Object.keys(this.categorias).filter((key) => this.categorias[key]);
+      const bateCategoria =
+        categoriasAtivas.length === 0 || categoriasAtivas.includes(profissional.categoria || '');
 
-      // 6. Vendedor
-      const tipoVendedor = p.tipo_vendedor || 'AUTONOMO';
-      const vendedorDisplay = tipoVendedor === 'AUTONOMO' ? 'Autônomo' : 'Empresa';
+      const vendedorDisplay = profissional.vendedor === 'AUTONOMO' ? 'Autônomo' : 'Empresa';
       const bateVendedor = this.tiposVendedor[vendedorDisplay];
 
-      return bateTermo && batePreco && bateAvaliacao && bateModalidade && bateCategoria && bateVendedor;
+      return (
+        bateTermo &&
+        bateCidade &&
+        batePreco &&
+        bateAvaliacao &&
+        bateModalidade &&
+        bateCategoria &&
+        bateVendedor
+      );
+    });
+  }
+
+  get isLoggedIn(): boolean {
+    return this.authService.isLoggedIn();
+  }
+
+  get isProfissional(): boolean {
+    return this.authService.getRole() === 'PROFISSIONAL';
+  }
+
+  ngOnInit() {
+    this.route.queryParams.subscribe((params) => {
+      this.termoBusca = params['q'] || '';
+      this.cidadeBusca = params['local'] || '';
+      this.carregarProfissionais();
     });
   }
 
@@ -92,21 +117,30 @@ export class ExplorarComponent implements OnInit {
     this.onFilterChange();
   }
 
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
-
-  get isLoggedIn(): boolean {
-    return this.authService.isLoggedIn();
+  limparFiltros() {
+    this.termoBusca = '';
+    this.cidadeBusca = '';
+    this.precomax = 500;
+    this.avaliacaoMinima = 0;
+    this.modalidade = 'todas';
+    Object.keys(this.categorias).forEach((key) => (this.categorias[key] = false));
+    Object.keys(this.tiposVendedor).forEach((key) => (this.tiposVendedor[key] = true));
+    this.router.navigate(['/explorar'], { replaceUrl: true });
+    this.carregarProfissionais();
+    this.onFilterChange();
   }
 
-  get isProfissional(): boolean {
-    return this.authService.getRole() === 'PROFISSIONAL';
+  getImageUrl(value?: string | null): string | null {
+    if (!value) return null;
+    if (/^(https?:|data:|blob:)/.test(value)) return value;
+    if (value.startsWith('/')) return `${this.apiUrl}${value}`;
+    return value;
   }
 
   logout() {
     this.modalService.confirm(
-      'Sair da Conta', 
-      'Tem certeza que deseja sair?', 
+      'Sair da Conta',
+      'Tem certeza que deseja sair?',
       () => {
         this.authService.logout();
         this.router.navigate(['/']);
@@ -115,24 +149,16 @@ export class ExplorarComponent implements OnInit {
     );
   }
 
-  ngOnInit() {
-    this.carregarProfissionais();
-    this.route.queryParams.subscribe(params => {
-      if (params['q']) this.termoBusca = params['q'];
-      if (params['local']) this.cidadeBusca = params['local'];
-    });
-  }
-
   carregarProfissionais() {
     this.isLoading = true;
     this.errorMessage = '';
-    const params = {
-      cidade: this.cidadeBusca || undefined,
-      limite: 50
-    };
+    const params: any = {};
+    if (this.cidadeBusca) params.cidade = this.cidadeBusca;
+    if (this.termoBusca) params.q = this.termoBusca;
+
     this.profissionalService.listar(params).subscribe({
       next: (response) => {
-        this.profissionais = response.data || [];
+        this.profissionais = response;
         this.isLoading = false;
       },
       error: (err) => {

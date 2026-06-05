@@ -7,52 +7,49 @@ import { ModalService } from '../../services/modal.service';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div *ngIf="modalService.state().isOpen" class="fixed inset-0 z-[100] flex items-center justify-center font-sans antialiased">
-      <!-- Backdrop -->
-      <div 
-        class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"
-        (click)="handleBackdropClick()">
-      </div>
+    <!-- Usa a estrutura oficial da DaisyUI -->
+    <dialog class="modal modal-bottom sm:modal-middle" [class.modal-open]="modalService.state().isOpen">
+      <div class="modal-box p-6 md:p-8 rounded-3xl relative">
+        <button class="btn btn-sm btn-circle btn-ghost absolute right-4 top-4" (click)="handleBackdropClick()">✕</button>
 
-      <!-- Modal Content -->
-      <div 
-        class="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-4 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-        
-        <div class="p-6">
-          <!-- Icon depending on type -->
-          <div class="mb-4 flex justify-center">
-            <div *ngIf="modalService.state().type === 'alert'" class="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center text-amber-600">
-              <span class="material-symbols-outlined text-2xl">info</span>
+        <div class="flex flex-col items-center">
+          <div class="mb-4">
+            <div *ngIf="modalService.state().type === 'alert'" class="w-14 h-14 rounded-full bg-amber-100 flex items-center justify-center text-amber-600">
+              <span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">info</span>
             </div>
-            <div *ngIf="modalService.state().type === 'confirm'" class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
-              <span class="material-symbols-outlined text-2xl">help</span>
+            <div *ngIf="modalService.state().type === 'confirm'" class="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+              <span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">help</span>
             </div>
-            <div *ngIf="modalService.state().type === 'success'" class="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center text-green-600 animate-bounce">
-              <span class="material-symbols-outlined text-4xl">check_circle</span>
+            <div *ngIf="modalService.state().type === 'success'" class="w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 animate-bounce">
+              <span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
             </div>
           </div>
 
-          <h3 class="text-xl font-black text-center text-slate-900 mb-2">{{ modalService.state().title }}</h3>
-          <p class="text-sm text-center text-slate-500 font-medium leading-relaxed" [innerHTML]="modalService.state().message"></p>
+          <h3 class="font-black text-2xl tracking-tight text-slate-900 mb-2">{{ modalService.state().title }}</h3>
+          <p class="py-2 text-center text-slate-500 font-medium" [innerHTML]="modalService.state().message"></p>
         </div>
 
-        <div class="bg-slate-50 p-4 border-t border-slate-100 flex flex-col-reverse sm:flex-row gap-3 justify-end">
+        <div class="modal-action mt-8 flex flex-col-reverse sm:flex-row gap-3">
           <button 
             *ngIf="modalService.state().type === 'confirm'"
             (click)="modalService.handleCancel()"
-            class="px-5 py-2.5 rounded-xl font-bold text-slate-600 hover:bg-slate-200 transition-colors">
+            class="btn btn-ghost font-bold rounded-2xl text-slate-500 w-full sm:w-auto">
             {{ modalService.state().cancelText }}
           </button>
           
           <button 
             (click)="modalService.handleConfirm()"
-            [ngClass]="modalService.state().type === 'alert' ? 'w-full bg-[#004ac6] hover:bg-blue-700' : 'bg-[#004ac6] hover:bg-blue-700'"
-            class="px-5 py-2.5 rounded-xl font-bold text-white shadow-md transition-all hover:-translate-y-0.5">
+            [ngClass]="modalService.state().type === 'alert' ? 'w-full btn-primary' : 'btn-primary w-full sm:w-auto'"
+            class="btn rounded-2xl font-black shadow-md">
             {{ modalService.state().confirmText }}
           </button>
         </div>
       </div>
-    </div>
+      
+      <form method="dialog" class="modal-backdrop bg-slate-900/40 backdrop-blur-sm">
+        <button (click)="handleBackdropClick()" class="cursor-default">fechar</button>
+      </form>
+    </dialog>
   `
 })
 export class ModalComponent {
